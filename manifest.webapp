@@ -1,33 +1,39 @@
 {
-  "version": "0.1.0",
-  "name": "FireJamendo",
-  "description": "Jamendo player for Firefox OS",
-  "launch_path": "/index.html",
-  "icons": {
-    "16": "/img/icons/icon16x16.png",
-    "48": "/img/icons/icon48x48.png",
-    "60": "/img/icons/icon60x60.png",
-    "128": "/img/icons/icon128x128.png"
-  },
-  "developer": {
-    "name": "Alfonso Saavedra 'Son Link'",
-    "url": "http://example.co"
-  },
-  "type": "privileged",
-  "permissions": {
-    "systemXHR": {
-      "description":"for acceso Jamendo API"
-    }
-  },
-  "installs_allowed_from": [
-    "*"
-  ],
-  "locales": {
-    "es": {
-      "name": "FireJamendo",
-      "description": "Reproductor de Jamendo para Firefox OS",
-      "permissions": {}
-    }
-  },
-  "default_locale": "en"
+	"version": "0.2.0",
+	"name": "FireJamendo",
+	"description": "Jamendo player for Firefox OS",
+	"launch_path": "/index.html",
+	"icons": {
+		"16": "/img/icons/icon16x16.png",
+		"48": "/img/icons/icon48x48.png",
+		"60": "/img/icons/icon60x60.png",
+		"128": "/img/icons/icon128x128.png"
+	},
+	"developer": {
+		"name": "Alfonso Saavedra 'Son Link'",
+		"url": "http://github.com/son-link/FireJamendo"
+	},
+	"type": "privileged",
+	"permissions": {
+		"systemXHR": {
+			"description":"for access to Jamendo API"
+		},
+		"backgroundservice": {
+			"description": "For run app in background"
+		},
+			"audio-channel-content": {
+			"description": "Need to keep playing audio when the apps is on running on background"
+		}
+	},
+	"installs_allowed_from": [
+		"*"
+	],
+	"locales": {
+		"es": {
+			"name": "FireJamendo",
+			"description": "Reproductor de Jamendo para Firefox OS",
+			"permissions": {}
+		}
+	},
+	"default_locale": "en"
 }
