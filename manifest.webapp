@@ -16,23 +16,53 @@
 	"type": "privileged",
 	"permissions": {
 		"systemXHR": {
-			"description":"for access to Jamendo API"
+			"description":"Needed to access to Jamendo APIs"
 		},
 		"backgroundservice": {
-			"description": "For run app in background"
+			"description": "Needed to run FireJamendo in background"
 		},
 			"audio-channel-content": {
-			"description": "Need to keep playing audio when the apps is on running on background"
+			"description": "Needed to keep playing audio when FireJamendo is running on background"
 		}
 	},
 	"installs_allowed_from": [
 		"*"
 	],
 	"locales": {
+		"eo": {
+			"name": "FireJamendo",
+			"description": "Muzikludilo el Jamendo por Firefox OS kaj por retumilo Firefox",
+			"permissions": {
+				"systemXHR": {
+					"description":"Bezonata por atingi API-oj de Jamendo"
+				},
+				"backgroundservice": {
+					"description": "Bezonata por ruli FireJamendo fone"
+				},
+					"audio-channel-content": {
+					"description": "Bezonata por ludi muzikon kiam FireJamendo rulas fone"
+				}
+			}
+		},
 		"es": {
 			"name": "FireJamendo",
-			"description": "Reproductor de Jamendo para Firefox OS",
+			"description": "Reproductor de Jamendo para Firefox OS y para navegador Firefox",
 			"permissions": {}
+		},
+		"it": {
+			"name": "FireJamendo",
+			"description": "Riproduttore di musica da Jamendo per Firefox OS per per il browser Firefox",
+			"permissions": {
+				"systemXHR": {
+					"description":"Necessario per accedere alle API di Jamendo"
+				},
+				"backgroundservice": {
+					"description": "Necessario per far funzionare FireJamendo in background"
+				},
+				"audio-channel-content": {
+					"description": "Necessario per far continuare la musica quando FireJamendo è in background"
+				}
+			}
 		}
 	},
 	"default_locale": "en"
