@@ -9,3 +9,9 @@
 * New app icon.
 * Now you can download the actual track listening.
 * Code clean and remove unnecessary files.
+
+##0.2.5 (r3):
+
+* New feature: search artists, tracks or albums.
+* Update translates.
+* Other minor changes.
