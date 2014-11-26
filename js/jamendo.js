@@ -73,7 +73,7 @@ function startPlay(){
 	}
 
 	song.play();
-	$('#play i').removeClass('fa-play-circle')
+	$('#play i').removeClass('fa-play')
 	$('#play i').addClass('fa-pause');
 	var seekbar = document.getElementById('seekbar');
 	seekbar.addEventListener("change", function(){
@@ -88,7 +88,17 @@ function startPlay(){
 		$('#total-time').text(convertTime(song.duration));
 	});
 	song.addEventListener('ended',function (){
-		nextTrack();
+		if (currentTrack = Object.keys(playlist).length - 1){
+			song.pause()
+			seekbar.value = 0;
+			currentTrack = 0;
+			$('#current-time').text('00:00');
+			$('#play i').removeClass('fa-pause')
+			$('#play i').addClass('fa-play');
+		}else{
+			seekbar.value = 0;
+			nextTrack();
+		}
 	});
 	song.addEventListener("error", function(e){
 		utils.status.show(_('stream_error'));
@@ -171,7 +181,16 @@ function getRadioStream(id){
 		});
 	}
 }
+function getTrack(id){
+	getData('artists/tracks?audioformat=ogg&imagesize=100&track_id='+id, function(responseText) {
+		data = responseText.results[0].tracks[0];
+		playlist = {};
+		playlist[0] = {"artist_name": data.name, "track_name": data.track_name, "image": data.album_image, "audio": data.audio, "album_name": data.album_name, 'download': data.audiodownload};
+		$('#controls').show();
+		startPlay();
+	});
 
+}
 function getTop(top){
 	params = top+'/?order=popularity_week';
 	if (top == 'tracks'){
@@ -198,9 +217,6 @@ function nextTrack(){
 		currentTrack += 1;
 		song.pause();
 		startPlay();
-	}else if (currentTrack = Object.keys(playlist).length - 1){
-		song.pause()
-		seekbar.value = 0;
 	}
 }
 
@@ -239,8 +255,34 @@ function getNews(){
 	});
 }
 
+$("#search-btn").click(function(e) {
+	e.preventDefault();
+	search = $('#search-input').val();
+	searchby = $('#search-by').val();
+	orderby = $('#order-by').val();
+	limit = $('#limit option:selected').text();
+	params = '{0}/?namesearch={1}&order={2}&limit={3}'.format(searchby, search, orderby, limit);
+	if (search){
+		getData(params, function(responseText) {
+			$('#search-results').empty();
+			data = responseText.results;
+			$.each( data, function( key, value ) {
+				image = ''
+				if (value.image == '' || value.album_image == ''){
+					image = 'img/no-image.png';
+				}else if (value.image){
+					image = value.image;
+				}else{
+					image = value.album_image;
+				}
+				$('#search-results').append('<li><aside><img src="{0}"/></aside><a href="#" data-id={1} data-type={2}><p>{3}</p></a></li>'.format(image, value.id, searchby, value.name));
+			});
+		});
+	}
+});
+
 document.addEventListener('DOMContentLoaded', function(){
-	changeDIV('news');
+	changeDIV('search');
 	getNews();
 	$("#news").delegate('.hero a', 'click', function() {
 		id = $(this).attr('id');
@@ -276,6 +318,19 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 	});
 
+	$('#search-results').delegate('li a', 'click', function(){
+		id = $(this).attr('data-id');
+		type = $(this).attr('data-type');
+		if (type == 'album'){
+			getAlbum(id);
+		}else if (type == 'tracks'){
+			getTrack(id);
+		}else{
+			getArtistTrackst(id);
+		}
+		changeDIV('listen');
+	});
+
 	// need for translate the app
 	var _ = navigator.mozL10n.get;
 	navigator.mozL10n.once(start);
@@ -290,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 function changeDIV(div){
 	// hidde all the divs except the especific
-	divs = ['radios', 'news', 'info', 'listen', 'jamendo-top'];
+	divs = ['radios', 'news', 'info', 'listen', 'jamendo-top', 'search'];
 	for (i=0; i < divs.length; i++){
 		if (div == divs[i]){
 			$('#'+div).show();
@@ -324,7 +379,9 @@ $('#btn-news').click( function () {
 	changeDIV('news');
 	getNews()
 });
-
+$('#btn-search').click( function () {
+	changeDIV('search');
+});
 $('#play').click( function () {
 	if (song.paused){
 		song.play();

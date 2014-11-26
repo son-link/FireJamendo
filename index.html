@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="css/buttons.css">
 		<link rel="stylesheet" href="css/tabs.css">
 		<link rel="stylesheet" href="css/status.css">
+		<link rel="stylesheet" href="css/input_areas.css">
 		<link href="css/transitions.css" rel="stylesheet" type="text/css">
 		<link href="css/util.css" rel="stylesheet" type="text/css">
 		<link href="css/firejamendo.css" rel="stylesheet" type="text/css">
@@ -39,6 +40,7 @@
 					<li><a href="#" id="btn-now-listen"><aside class="fa fa-headphones"></aside><p data-l10n-id="now-listen"></p></a></li>
 					<li><a href="#" id="btn-radios"><aside class="fa fa-microphone"></aside><p>Radios</p></a></li>
 					<li><a href="#" id="btn-info"><aside class="fa fa-star"></aside><p>Top</p></a></li>
+					<li><a href="#" id="btn-search"><aside class="fa fa-search"></aside><p data-l10n-id="search"></p></a></li>
 					<!--li><a href="#" id="btn-info"><aside class="fa fa-info-circle"></aside><p data-l10n-id="btn-info">Info</p></a></li-->
 				</ul>
 			</nav>
@@ -72,7 +74,7 @@
 				<div id="listen">
 					<div class="listen col-1-4" style="top: 5px;">
 						<h2 id="track-name"></h2>
-						<img id="album-art" src="img/no-cover.png">
+						<img id="album-art" src="img/no-image.png">
 						<h2 id="artist"></h2>
 						<h2 id="album"></h2>
 						<div id="controls">
@@ -100,21 +102,72 @@
 					<div id="top-list" data-type="list"><ul></ul></div>
 						<ul role="tablist" class="bb-tablist" id="top-tabs">
 							<li role="presentation">
-								<a id="top-albums" href="#" role="tab" data-l10n-id="albums">Albums</a>
+								<a id="top-albums" href="#" role="tab" data-l10n-id="albums"></a>
 							</li>
 							<li role="presentation">
-								<a id="top-artists" href="#" role="tab" data-l10n-id="artists">Artists</a>
+								<a id="top-artists" href="#" role="tab" data-l10n-id="artists"></a>
 							</li>
 							<li role="presentation">
-								<a id="top-tracks" href="#" role="tab" data-l10n-id="tracks">Tracks</a>
+								<a id="top-tracks" href="#" role="tab" data-l10n-id="tracks"></a>
 							</li>
 						</ul>
 				</div><!-- Top albums, tracks and artists -->
+				<div id="search">
+					<div>
+						<form id="search-form">
+							<p>
+								<input placeholder="..." type="text" id="search-input">
+							</p>
+							<div class="row">
+								<div class="col-1-4">
+									<label for="search-by" data-l10n-id="search-by">Search by</label>
+									<select id="search-by">
+										<option value="albums" data-l10n-id="albums"></option>
+										<option value="tracks" data-l10n-id="tracks"></option>
+										<option value="artists" data-l10n-id="artists"></option>
+									</select>
+								</div>
+								<div class="col-1-4">
+									<label for="order-by" data-l10n-id="order-by">Order by</label>
+									<select id="order-by">
+										<option value="name" data-l10n-id="name"></option>
+										<option value="popularity_total" data-l10n-id="popularity_total">Popularity (total)</option>
+										<option value="popularity_month" data-l10n-id="popularity_month">Popularity (month)</option>
+										<option value="popularity_week" data-l10n-id="popularity_week">Popularity (week)</option>
+										<option value="releasedate" data-l10n-id="releasedate"></option>
+									</select>
+								</div>
+								<div class="col-1-4">
+									<label for="limit" data-l10n-id="limit"></label>
+									<select id="limit">
+										<option>10</option>
+										<option>20</option>
+										<option>30</option>
+										<option>40</option>
+										<option>50</option>
+										<option>60</option>
+										<option>70</option>
+										<option>80</option>
+										<option>90</option>
+										<option>100</option>
+									</select>
+								</div>
+								<div class="col-1-4">
+									<br />
+									<button id="search-btn" data-l10n-id="search"></button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div data-type="list">
+						<ul id="search-results"></ul>
+					</div>
+				</div>
 			</article>
 			<section role="status" id="status"></section>
 		</section> <!-- end drawer -->
 	</section> <!-- end index -->
-	<script type="text/javascript" src="js/libs/l10n.js" defer></script>
+	<script type="text/javascript" src="js/l10n.js" defer></script>
 	<script type="text/javascript" src="js/jamendo.js" defer></script>
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<script type="text/javascript" defer src="js/status.js"></script>
