@@ -282,7 +282,7 @@ $("#search-btn").click(function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function(){
-	changeDIV('search');
+	changeDIV('news');
 	getNews();
 	$("#news").delegate('.hero a', 'click', function() {
 		id = $(this).attr('id');
