@@ -225,11 +225,20 @@ function getNews(){
     // News
 		if (navigator.mozL10n.language.code == 'es'){
 			lang = 'es';
+		}else if (navigator.mozL10n.language.code == 'it'){
+			lang = 'it';
 		}else{
 			lang = 'en';
 		}
 		data = responseText.results;
 		for (i=0; i<data.length; i++){
+			text = '';
+			if (data[i].text[lang]){
+				text = data[i].text[lang];
+			}else{
+				text = data[i].text.en;
+			}
+
 			if (data[i].type == "album"){
 				html = '<article class="col-1-2"> \
 					<div class="hero">\
@@ -238,7 +247,7 @@ function getNews(){
 					</div>\
 					<p class="title">{3}</p>\
 					{4}"\
-				</article>'.format(data[i].joinid, data[i].images.size315_111, data[i].title[lang], data[i].subtitle[lang], data[i].text[lang]);
+				</article>'.format(data[i].joinid, data[i].images.size315_111, data[i].title[lang], data[i].subtitle[lang], text);
 			}else{
 				type = _(data[i].type);
 				html = '<article class="col-1-2"> \
@@ -248,7 +257,7 @@ function getNews(){
 					</div>\
 					<p class="title">{4}</p>\
 					{5}"\
-				</article>'.format(data[i].joinid, data[i].type, data[i].images.size315_111, data[i].title[lang], type, data[i].text[lang]);
+				</article>'.format(data[i].joinid, data[i].type, data[i].images.size315_111, data[i].title[lang], type, text);
 			}
 			$('#news').append(html);
 		}
