@@ -15,3 +15,10 @@
 * New feature: search artists, tracks or albums.
 * Update translates.
 * Other minor changes.
+
+##0.2.6 (r4):
+
+* Added Italian an Esperanto locations and updated English and Spanish (thanks to Airon90).
+* Update manifest.webapp, README.md and this file.
+* Now you can read last news in Italian. If not avaliable show this in English
+* Other minor changes.
