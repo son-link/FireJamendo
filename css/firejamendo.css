@@ -9,7 +9,7 @@
 	display: table;
 	clear: both;
 }
-body {color: #1E0A3F}
+body {color: #432144}
 .hero {
 	position: relative;
 	float: left;
@@ -17,12 +17,11 @@ body {color: #1E0A3F}
 }
 
 .text {
-	background:rgba(255,255,255,0.5);
+	background:rgba(255,255,255,0.6);
 	position: absolute;
 	bottom:0;
 	left:0;
 	padding:1rem;
-
 }
 /*article {overflow: auto;}*/
 img, .text {width: 100%}
@@ -60,7 +59,7 @@ img, .text {width: 100%}
 		width: 12.5%;
 	}
 }
-.title {margin: 0; color: orange}
+.title {margin: 0; color: #333}
 .toolbar button {
 	background: rgba(0,0,0,0);
 	border: 0;
@@ -68,7 +67,7 @@ img, .text {width: 100%}
 .listen, #info {margin: 0 auto;}
 .listen, #info {text-align: center}
 .listen img, #info img {max-width: 100px;}
-#news {height: 100%; background: #fff;}
+#news {height: 100%; background: #f4f4f4;}
 #index {
 	height: 100%;
 }
@@ -107,9 +106,9 @@ section[data-type="sidebar"] + section[role="region"] > header:first-child > but
 section[data-type="sidebar"] + section[role="region"] > header:first-child > a {
 	background-position: 3.5rem center;
 }
-section[data-type="sidebar"], section[role="status"] {background: #1E0A3F !important}
-section[data-type="sidebar"] > nav > ul > li > a {border-bottom: 0.1rem solid #826BA9 !important}
-section[data-type="sidebar"] > nav > ul > li > a:hover {background: #826BA9 !important; border-bottom: 0.1rem solid #1E0A3F !important}
+section[data-type="sidebar"], section[role="status"] {background: #381D38 !important}
+section[data-type="sidebar"] > nav > ul > li > a {border-bottom: 0.1rem solid #693F6A !important}
+section[data-type="sidebar"] > nav > ul > li > a:hover {background: #562E57 !important; border-bottom: 0.1rem solid #381D38 !important}
 
 /* Switches */
 #switches div:last-child label:last-child {
@@ -184,8 +183,8 @@ section[data-type="sidebar"] p { color: #FFF !important}
 }
 #toolbar a {
 	display: block;
-	background-image: radial-gradient(circle at top left, #826BA9, #1E0A3F);
-	color: #DDD1F1;
+	background: #522A5B;
+	color: rgba(255,255,255,0.9);
 	margin-right: 5px;
 	width: 4rem;
 	height: 4rem;
@@ -193,24 +192,28 @@ section[data-type="sidebar"] p { color: #FFF !important}
 	text-align: center;
 	line-height: 4rem;
 	border-radius: 50%;
-	box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
 	font-size: 1rem;
 	vertical-align: middle;
-	text-shadow: #04000A 0px -1px 1px;
 }
 #toolbar a:hover{
 	text-decoration: none;
-	color: #826BA9;
+	color: #693F6A;
 	background: #f5f5f5;
 	text-shadow: #04000A 0px 1px 0px;
 	box-shadow: none;
 }
-#header, section[data-type="sidebar"] header {
-	background-image: -moz-linear-gradient(top, #826BA9, #1E0A3F);
+#header {
+	background-image: -moz-linear-gradient(top, #693F6A, #562E57);
 	color: #DDD1F1;
 	text-shadow: #04000A 0px -1px 1px;
 }
-section[data-type="sidebar"] header {border-right: 0.1rem solid #826BA9 !important}
+
+section[data-type="sidebar"] > header {
+  background: #4B294C;
+  font-style: italic;
+}
+
+section[data-type="sidebar"] header {border-right: 0.1rem solid #693F6A !important}
 #play {
 	width: 6rem !important;
 	height: 6rem !important;
@@ -220,7 +223,7 @@ section[data-type="sidebar"] header {border-right: 0.1rem solid #826BA9 !importa
 /* slider */
 [role="slider"] progress::-moz-progress-bar,
 input[type=range]::-moz-range-progress, #toolbar a {
-	background: #482E74;
+	background: #522A5B;
 }
 
 [role="slider"] button,
@@ -228,14 +231,24 @@ input[type=range]::-moz-range-progress, #toolbar a {
 	background:
 	radial-gradient(
 		circle at top,
-		#826BA9,
-		#1E0A3F
+		#693F6A,
+		#562E57
 	);
 	border: 0;
 }
 [role="slider"] > label {color: #1E0A3F}
 	[role="slider"] progress,
 	input[type="range"]::-moz-range-track {
-	background: #826BA9;
+	background: #522A5B;
 }
 #seekbar, input {border: 0 !important}
+
+ul, ol, li {
+  margin: 0;
+  padding: 0.2rem;
+  font-size: 1.8rem;
+}
+
+[data-type="list"] li {
+  border-bottom: 0.1rem solid transparent;
+}
