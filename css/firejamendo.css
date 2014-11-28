@@ -60,14 +60,17 @@ img, .text {width: 100%}
 		width: 12.5%;
 	}
 }
+@media all and ( max-width: 550px ){
+	.listen img, #info img {max-width: 100px; max-height: 100px;}
+}
 .title {margin: 0; color: orange}
 .toolbar button {
 	background: rgba(0,0,0,0);
 	border: 0;
 }
 .listen, #info {margin: 0 auto;}
-.listen, #info {text-align: center}
-.listen img, #info img {max-width: 100px;}
+.listen {text-align: center}
+.listen img, #artist_cover {max-width: 150px; max-height: 150px;}
 #news {height: 100%; background: #fff;}
 #index {
 	height: 100%;
@@ -151,10 +154,7 @@ section[data-type="sidebar"] > nav > ul > li > a {
 }
 [data-icon]:before { color: #FFF; }
 section[data-type="sidebar"] p { color: #FFF !important}
-#info-list button {
-	float: left;
-	display: inline;
-}
+
 #toolbar i {
 	display: inline-block;
 	vertical-align: middle;

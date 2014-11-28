@@ -53,6 +53,18 @@ function getData(params, cb){
 	xmlhttp.send();
 }
 
+function changeDIV(div){
+	// hidde all the divs except the especific
+	divs = ['radios', 'news', 'artist-info', 'listen', 'jamendo-top', 'search'];
+	for (i=0; i < divs.length; i++){
+		if (div == divs[i]){
+			$('#'+div).show();
+		}else{
+			$('#'+divs[i]).hide();
+		}
+	}
+}
+
 function startPlay(){
 	if (song){
 		song.pause();
@@ -264,6 +276,20 @@ function getNews(){
 	});
 }
 
+function getArtistData(id){
+	getData('artists/?id='+id, function(responseText) {
+		$('#artist_name').text(responseText.results[0].name);
+		joindate = new Date(responseText.results[0].joindate);
+		$('#artist_joindate').text(joindate.toLocaleDateString(lang));
+		if (responseText.results[0].website){
+			$('#artist_website').attr('href', responseText.results[0].website);
+		}else{
+			$('#artist_website').attr('href', '#');
+		}
+		$('#artist_cover').attr('src', responseText.results[0].image);
+	});
+	getArtistTrackst(id);
+}
 $("#search-btn").click(function(e) {
 	e.preventDefault();
 	search = $('#search-input').val();
@@ -275,6 +301,7 @@ $("#search-btn").click(function(e) {
 		getData(params, function(responseText) {
 			$('#search-results').empty();
 			data = responseText.results;
+			console.log(responseText);
 			$.each( data, function( key, value ) {
 				image = ''
 				if (value.image == '' || value.album_image == ''){
@@ -284,6 +311,7 @@ $("#search-btn").click(function(e) {
 				}else{
 					image = value.album_image;
 				}
+				console.log(value);
 				$('#search-results').append('<li><aside><img src="{0}"/></aside><a href="#" data-id={1} data-type={2}><p>{3}</p></a></li>'.format(image, value.id, searchby, value.name));
 			});
 		});
@@ -291,7 +319,7 @@ $("#search-btn").click(function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function(){
-	changeDIV('news');
+	changeDIV('artist-info');
 	getNews();
 	$("#news").delegate('.hero a', 'click', function() {
 		id = $(this).attr('id');
@@ -335,9 +363,9 @@ document.addEventListener('DOMContentLoaded', function(){
 		}else if (type == 'tracks'){
 			getTrack(id);
 		}else{
-			getArtistTrackst(id);
+			getArtistData(id);
 		}
-		changeDIV('listen');
+		changeDIV('artist-info');
 	});
 
 	// need for translate the app
@@ -351,18 +379,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 	}
 });
-
-function changeDIV(div){
-	// hidde all the divs except the especific
-	divs = ['radios', 'news', 'info', 'listen', 'jamendo-top', 'search'];
-	for (i=0; i < divs.length; i++){
-		if (div == divs[i]){
-			$('#'+div).show();
-		}else{
-			$('#'+divs[i]).hide();
-		}
-	}
-}
 
 $('#btn-now-listen').click(function () {
 	changeDIV('listen');

@@ -32,7 +32,7 @@
 				<menu type="toolbar">
 					<a href="#" data-l10n-id="close"></a>
 				</menu>
-				<h1>Menu</h1>
+				<h1 data-l10n-id="menu">Menu</h1>
 			</header>
 			<nav data-type="list">
 				<ul>
@@ -41,7 +41,7 @@
 					<li><a href="#" id="btn-radios"><aside class="fa fa-microphone"></aside><p>Radios</p></a></li>
 					<li><a href="#" id="btn-info"><aside class="fa fa-star"></aside><p>Top</p></a></li>
 					<li><a href="#" id="btn-search"><aside class="fa fa-search"></aside><p data-l10n-id="search"></p></a></li>
-					<!--li><a href="#" id="btn-info"><aside class="fa fa-info-circle"></aside><p data-l10n-id="btn-info">Info</p></a></li-->
+					<li><a href="#" id="btn-info"><aside class="fa fa-info-circle"></aside><p data-l10n-id="btn-info">Info</p></a></li>
 				</ul>
 			</nav>
 		</section>
@@ -57,18 +57,20 @@
 				<div id="radios" data-type="list">
 					<ul id="radios-list"></ul>
 				</div><!--Radios list-->
-				<!--div id="info" >
-					<div id="info-top" style="position: relative;">
-						<img id="info-cover" src="img/no-cover.png">
-						<div>
-							<p id="info-album">Album:</p>
-							<p id="info-artist">Artits:</p>
-							<p id="info-date">2014-11-17</p>
-						</div>
+				<div id="artist-info" class="row">
+					<img class="col-2-4" id="artist_cover" src="img/no-image.png">
+					<div class="col-1-2">
+						<p id="artist_name">Artist name</p>
+						<p id="artist_joindate">Join date</p>
+						<p><a href="#" id="artist_website">Website</a></p>
 					</div>
-					<div id="info-list">
-						<button data-icon="download"></button>
-						<button class="col-1-3">Hola</button>
+					<div class="col-1-2">
+						<h2>Albums</h2>
+						<ul id="albums-list"></ul>
+					</div>
+					<div class="col-1-2">
+						<h2>Tracks</h2>
+						<ul id="tracks-list"></ul>
 					</div>
 				</div><!--info-->
 				<div id="listen">
