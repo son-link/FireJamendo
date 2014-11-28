@@ -397,7 +397,7 @@ $('#btn-radios').click( function () {
 
 
 $('#btn-info').click( function () {
-	changeDIV('jamendo-top');
+	changeDIV('artist-info');
 });
 
 $('#btn-news').click( function () {
