@@ -27,3 +27,9 @@
 * Added German location
 * Fix CSS and icons
 * Starting support for view artist and album information.
+
+##r6:
+* Fix German location in Jamendo feeds.
+* Beta for artist info.
+* Update English and Spanish locations.
+* Other minor changes.
