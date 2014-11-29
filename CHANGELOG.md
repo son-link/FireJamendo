@@ -22,3 +22,8 @@
 * Update manifest.webapp, README.md and this file.
 * Now you can read last news in Italian. If not avaliable show this in English
 * Other minor changes.
+
+## r5:
+* Added German location
+* Fix CSS and icons
+* Starting support for view artist and album information.

@@ -40,9 +40,9 @@
 					<li><a href="#" id="btn-news"><aside class="fa fa-rss"></aside><p data-l10n-id="news"></p></a></li>
 					<li><a href="#" id="btn-now-listen"><aside class="fa fa-headphones"></aside><p data-l10n-id="now-listen"></p></a></li>
 					<li><a href="#" id="btn-radios"><aside class="fa fa-microphone"></aside><p>Radios</p></a></li>
-					<li><a href="#" id="btn-info"><aside class="fa fa-star"></aside><p>Top</p></a></li>
+					<li><a href="#" id="btn-top"><aside class="fa fa-star"></aside><p>Top</p></a></li>
 					<li><a href="#" id="btn-search"><aside class="fa fa-search"></aside><p data-l10n-id="search"></p></a></li>
-					<li><a href="#" id="btn-info"><aside class="fa fa-info-circle"></aside><p data-l10n-id="btn-info">Info</p></a></li>
+					<li><a href="#" id="btn-info"><aside class="fa fa-info-circle"></aside><p data-l10n-id="btn-info"></p></a></li>
 				</ul>
 			</nav>
 		</section>
@@ -58,21 +58,31 @@
 				<div id="radios" data-type="list">
 					<ul id="radios-list"></ul>
 				</div><!--Radios list-->
-				<div id="artist-info" class="row">
-					<div class="col-1-4" ><img id="artist_cover" src="img/no-image.png"></div>
-					<div class="col-1-2">
-						<p id="artist_name">Artist name</p>
-						<p id="artist_joindate">Join date</p>
-						<p><a href="#" id="artist_website">Website</a></p>
+				<div id="artist-info">
+					<div class="row">
+						<div class="col-1-4" ><img id="artist_cover" src="img/no-image.png"></div>
+						<div class="col-1-2">
+							<p id="artist_name"><br/></p>
+							<p id="artist_joindate"><br/></p>
+							<p><a href="#" id="artist_website" data-l10n-id="website"></a></p>
+						</div>
 					</div>
-					<div class="col-1-2">
-						<h2>Albums</h2>
-						<ul id="albums-list"></ul>
+					<div data-type="list" id="tab-tracks">
+						<header data-l10n-id="tracks"></header>
+						<ul id="artist_tracks"></ul>
 					</div>
-					<div class="col-1-2">
-						<h2>Tracks</h2>
-						<ul id="tracks-list"></ul>
+					<div data-type="list" id="tab-albums">
+						<header data-l10n-id="albums">Albums</header>
+						<ul id="artist_albums"></ul>
 					</div>
+					<ul role="tablist" class="bb-tablist" id="artist-tabs">
+						<li role="presentation">
+							<a data-tab="tab-tracks" href="#" role="tab" data-l10n-id="tracks"></a>
+						</li>
+						<li role="presentation">
+							<a data-tab="tab-albums" href="#" role="tab" data-l10n-id="albums"></a>
+						</li>
+					</ul>
 				</div><!--info-->
 				<div id="listen">
 					<div class="listen col-1-4" style="top: 5px;">

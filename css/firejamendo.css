@@ -10,6 +10,7 @@
 	clear: both;
 }
 body {color: #432144}
+a {text-decoration: none}
 .hero {
 	position: relative;
 	float: left;
@@ -61,7 +62,7 @@ img, .text {width: 100%}
 }
 @media all and ( max-width: 550px ){
 	.listen img, #info img {max-width: 100px; max-height: 100px;}
-	#artist-info {text-align: center; margin: 0 auto;}
+	#artist-info .row {text-align: center; margin: 0 auto;}
 }
 
 .title {margin: 0; color: #333}
@@ -166,10 +167,11 @@ section[data-type="sidebar"] p { color: #FFF !important}
 	display: block;
 	/*font-size: 3rem*/
 }
-#top-tabs {
+#top-tabs, #artist-tabs {
 	position: fixed;
 	bottom:0;
 	left:0;
+	width: 100%;
 }
 /* player buttons */
 #toolbar {
@@ -253,3 +255,6 @@ ul, ol, li {
 [data-type="list"] li {
   border-bottom: 0.1rem solid transparent;
 }
+#top-list ul, #tab-albums ul, #tab-tracks ul {overflow: hidden;}
+
+#artist-info, #jamendo-top {margin-bottom: 6rem;}
