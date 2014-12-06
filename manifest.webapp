@@ -2,7 +2,7 @@
 	"version": "0.2.6",
 	"name": "FireJamendo",
 	"description": "Jamendo player for Firefox OS and Firefox web browser",
-	"launch_path": "/index.html",
+	"launch_path": "/index-pure.html",
 	"icons": {
 		"16": "/img/icons/icon16x16.png",
 		"48": "/img/icons/icon48x48.png",

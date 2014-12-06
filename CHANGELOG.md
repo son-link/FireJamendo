@@ -33,3 +33,11 @@
 * Beta for artist info.
 * Update English and Spanish locations.
 * Other minor changes.
+
+##r7:
+* Change interface. Building Blocks been replaced by Pure CSS.
+* Change xmlhttp for $.ajax for get data from the Jamendo API.
+* Delete unnecesary files
+* Many changes in javascript functions.
+* Update Spanish and English locations.
+* Other changes.
