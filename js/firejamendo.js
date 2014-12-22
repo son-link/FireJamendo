@@ -10,6 +10,7 @@ var currentRadio = 0;
 var artist_albums = {};
 var artist_tracks = {};
 var user_tracks = {};
+var top_tracks = {};
 var access_token;
 var radio_interval;
 var artist_id = 0;
@@ -184,6 +185,8 @@ function getAlbum(id){
 		}
 		$('#controls').show();
 		$('#radio-control').hide();
+		$('#section-title').text(_('now-listen'));
+		changeDIV('listen');
 		startPlay();
 	});
 }
@@ -262,7 +265,6 @@ function getTrack(id){
 		$('#radio-control').hide();
 		startPlay();
 	});
-
 }
 function getTop(top){
 	params = top+'/?order={0}&limit={1}&imagesize=100'.format(window.localStorage.top_orderby, parseInt(window.localStorage.top_limit));
@@ -283,7 +285,7 @@ function getTop(top){
 			}else if (top == 'artists'){
 				$('#top-list').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" id="{0}" data-type="artist"><img src="{1}" class="pure-img"><p><b>{2}</b></p></a></div>'.format(data[i].id, cover, data[i].name));
 			}else{
-				playlist[i] = {"artist_name": data[i].artist_name, "track_name": data[i].name, "image": cover, "audio": data[i].audio, "album_name": data[i].album_name, 'download': data[i].audiodownload, 'track_id': data[i].id};
+				top_tracks[i] = {"artist_name": data[i].artist_name, "track_name": data[i].name, "image": cover, "audio": data[i].audio, "album_name": data[i].album_name, 'download': data[i].audiodownload, 'track_id': data[i].id};
 				$('#top-list').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" id="{0}" data-type="track"><img src="{1}" class="pure-img"><p><b>{2}</b><br />{3}</p></a></div>'.format(i, cover, data[i].name, data[i].artist_name));
 			}
 		}
@@ -578,9 +580,11 @@ document.addEventListener('DOMContentLoaded', function(){
 			$('#section-title').text(_('artist'));
 			changeDIV('artist-info');
 		}else{
-			currentTrack = parseInt($(this).attr('data-track'));
-			changeDIV('listen');
+			playlist = top_tracks;
+			currentTrack = parseInt($(this).attr('id'));
 			startPlay();
+			$('#section-title').text(_('now-listen'));
+			changeDIV('listen');
 		}
 	});
 
@@ -589,7 +593,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		type = $(this).attr('data-type');
 		if (type == 'album'){
 			getAlbum(id);
-		}else if (type == 'tracks'){
+		}else if (type == 'track'){
 			getTrack(id);
 		}else{
 			getArtistData(id);
@@ -774,7 +778,6 @@ $('#saveconf').click(function(e){
 			}
 			window.localStorage[this.id] = this.value;
 		}
-		console.log(window.localStorage);
 	});
 });
 
