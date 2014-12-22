@@ -272,7 +272,7 @@ function getTop(top){
 		for (i=0; i < data.length; i++){
 			cover = '';
 			if (data[i].album_image){
-				cover = data.albums[i].image;
+				cover = data[i].album_image;
 			}else if (data[i].image){
 				cover = data[i].image;
 			}else{
