@@ -2,7 +2,7 @@
 	"version": "0.2.6",
 	"name": "FireJamendo",
 	"description": "Jamendo player for Firefox OS and Firefox web browser",
-	"launch_path": "/index-pure.html",
+	"launch_path": "/index.html",
 	"icons": {
 		"16": "/img/icons/icon16x16.png",
 		"48": "/img/icons/icon48x48.png",
@@ -24,7 +24,8 @@
 		},
 			"audio-channel-content": {
 			"description": "Needed to keep playing audio when FireJamendo is running on background"
-		}
+		},
+		"network-http": {}
 	},
 	"installs_allowed_from": [
 		"*"
@@ -66,5 +67,9 @@
 			}
 		}
 	},
-	"default_locale": "en"
+	"default_locale": "en",
+	"redirects": [{
+		"from": "http://localhost",
+		"to": "/redirect.html"
+	}]
 }

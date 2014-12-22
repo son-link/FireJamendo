@@ -41,3 +41,11 @@
 * Many changes in javascript functions.
 * Update Spanish and English locations.
 * Other changes.
+
+##r8:
+* Now you can listen your favorites tracks, albums and artist from your Jamendo account.
+* Added share buttons. Share the track you are now listening or artist on Facebook, Twitter and Google+
+* Added show error messages function.
+* Added configuration page.
+* Updated Spanish and English locations.
+* Other changes and clean code.
