@@ -194,6 +194,7 @@ function getPlaylist(id){
 	// get playlist
 	getData('playlists/tracks?audioformat=ogg&id='+id, function(responseText) {
 		playlist = {};
+		data = responseText.results[0];
 		for (i=0; i<data.tracks.length; i++){
 			track_name = data.tracks[i].name;
 			audio = data.tracks[i].audio;
