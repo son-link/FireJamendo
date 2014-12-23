@@ -229,19 +229,22 @@ function getRadioStream(id){
 	if (currentRadio != id || player.src != ''){
 		clearInterval(radio_interval);
 		currentRadio = id;
+		console.log(currentRadio);
 		getData('radios/stream?id='+id, function(responseText) {
 			playlist = {};
+			console.log(playlist);
 			$('#play-radio i').removeClass('fa-play');
 			$('#play-radio i').addClass('fa-pause');
 			data = responseText.results[0];
 			playlist[0] = {"artist_name": data.playingnow.artist_name, "track_name": data.playingnow.track_name, "image": data.playingnow.track_image, "audio": data.stream, "album_name": data.playingnow.album_name, 'track_id': data.playingnow.track_id};
-			startPlay();
 			$('#controls').hide();
 			$('#radio-control').show();
 			// set interval for get the next track info
 			radio_interval = setInterval(function(){
 				getRadioStream(id)
 			}, parseInt(data.callmeback));
+			currentTrack = 0;
+			startPlay();
 		 });
 	}else{
 		getData('radios/stream?id='+id, function(responseText) {
@@ -585,6 +588,8 @@ document.addEventListener('DOMContentLoaded', function(){
 			currentTrack = parseInt($(this).attr('id'));
 			startPlay();
 			$('#section-title').text(_('now-listen'));
+			$('#controls').show();
+			$('#radio-control').hide();
 			changeDIV('listen');
 		}
 	});
@@ -611,6 +616,8 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 		currentTrack = parseInt($(this).attr('track-id'));
 		$('#section-title').text(_('now-listen'));
+		$('#controls').show();
+		$('#radio-control').hide();
 		changeDIV('listen');
 		startPlay();
 	});
