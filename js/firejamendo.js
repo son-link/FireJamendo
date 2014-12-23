@@ -187,6 +187,7 @@ function getAlbum(id){
 		$('#radio-control').hide();
 		$('#section-title').text(_('now-listen'));
 		changeDIV('listen');
+		currentTrack = 0;
 		startPlay();
 	});
 }
@@ -229,10 +230,8 @@ function getRadioStream(id){
 	if (currentRadio != id || player.src != ''){
 		clearInterval(radio_interval);
 		currentRadio = id;
-		console.log(currentRadio);
 		getData('radios/stream?id='+id, function(responseText) {
 			playlist = {};
-			console.log(playlist);
 			$('#play-radio i').removeClass('fa-play');
 			$('#play-radio i').addClass('fa-pause');
 			data = responseText.results[0];
@@ -356,10 +355,7 @@ function getNews(){
 
 function getArtistData(id){
 	artist_id = id;
-	$('#artist-tracks').hide();
-	$('#tab-albums').parent().addClass('active');
-	$('#tab-tracks').parent().removeClass('active');
-	$('#artist-albums').show();
+	changeTab('artist-albums', ['artist-tracks', 'artist-albums']);
 
 	getData('artists/albums?limit=all&id='+id, function(responseText) {
 		data = responseText.results[0]
@@ -477,10 +473,13 @@ function JamendoLogout(){
 
 function getUserData(){
 	changeDIV('profile');
+	if( $('#user-albums').is(':empty') ) {
+		changeTab('user-albums', ['user-tracks', 'user-albums', 'user-artists']);
+	}
 	$('#section-title').text(_('profile'));
-	$('#user-albums').empty()
-	$('#user-tracks').empty()
-	changeTab('user-albums', ['user-tracks', 'user-albums', 'user-artists']);
+	$('#user-albums').empty();
+	$('#user-tracks').empty();
+	$('#user-artists').empty();
 	getData('users/albums?access_token={0}&limit={1}'.format(window.localStorage.access_token, window.localStorage.profile_limit), function(responseText){
 		data = responseText.results[0];
 		window.localStorage.username = data.dispname;
@@ -498,7 +497,7 @@ function getUserData(){
 		}
 	});
 	getData('users/artists?access_token='+window.localStorage.access_token, function(responseText){
-		data = responseText.results[0]
+		data = responseText.results[0];
 		for (i=0; i<data.artists.length; i++){
 			cover = ''
 			if (data.artists[i].image){
