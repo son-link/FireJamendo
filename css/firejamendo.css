@@ -129,9 +129,8 @@ input, .styled-select select {
 	border: 0;
 	color: #432144;
 }
-#search {margin: auto}
-#search div {margin: 0.5rem;}
-#search form {text-align: center}
+#search-form div {margin: 0.5rem;}
+#search-form {text-align: center}
 #info-top p {text-align: left}
 .share_buttons {margin-top: 0.5rem}
 #error {
