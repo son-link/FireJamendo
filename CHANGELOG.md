@@ -49,3 +49,9 @@
 * Added configuration page.
 * Updated Spanish and English locations.
 * Other changes and clean code.
+
+##r9:
+* Now you can listen your Jamendo playlists and import for playing on your favorite player (not avaliable on Firefox OS).
+* Now change browser title with the actual track and artist playing.
+* Other changes.
+* And a happy new year 2015 ;)

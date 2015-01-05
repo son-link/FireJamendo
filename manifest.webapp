@@ -25,7 +25,8 @@
 			"audio-channel-content": {
 			"description": "Needed to keep playing audio when FireJamendo is running on background"
 		},
-		"network-http": {}
+		"network-http": {},
+		"desktop-notification":{}
 	},
 	"installs_allowed_from": [
 		"*"

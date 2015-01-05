@@ -10,7 +10,7 @@ body, .header, legend {color: #432144 !important;}
 h5 {margin: 0; font-size: 100%}
 #news, #search-results, #artist-grid {font-size: 80%;}
 #news .pure-u-1 {margin-left: 0.5rem;}
-#toolbar ul, .share_buttons ul, #radio-control ul {margin: 0; padding: 0;}
+#toolbar ul, .share_buttons ul, #radio-control ul, #user-playlists ul {margin: 0; padding: 0;}
 #toolbar, #share_button {
 	list-style: none;
 	text-align: center;
@@ -146,3 +146,4 @@ input, .styled-select select {
 .form_error {border-color: #F00 !important;}
 #btn-login, #saveconf, #clear-data {color: #fff}
 #clear-data { background: rgb(202, 60, 60)}
+#user-playlists li {display: block; margin: 0.5rem; border-bottom: 1px solid #522A5B; font-weight: bold;}
