@@ -1,241 +1,148 @@
-/* resets */
-*,
-*:before,
-*:after {
-	box-sizing: border-box;
-}
-.clearfix:after {
-	content: "";
-	display: table;
-	clear: both;
-}
-body {color: #1E0A3F}
-.hero {
-	position: relative;
-	float: left;
-	margin-right: 5px;
-}
-
-.text {
-	background:rgba(255,255,255,0.5);
-	position: absolute;
-	bottom:0;
-	left:0;
-	padding:1rem;
-
-}
-/*article {overflow: auto;}*/
-img, .text {width: 100%}
-/* grid */
-.row {
-	display: flex;
-	flex-flow: row wrap;
-	margin: 0 -10px;
-	margin-bottom: 10px;
-}
-.row:last-child {
-	margin-bottom: 0;
-}
-[class*="col-"] {
-	padding: 10px;
-	width: 100%;
-}
-
+*, .pure-g [class*="pure-u"] {font-family: 'FiraSans'}
+#menu ul span {margin-left: 0.5rem}
+body, .header, legend {color: #432144 !important;}
 @media all and ( min-width: 600px ) {
-
-	/* set col widths */
-	.col-2-3 {
-		width: 66.66%;
-	}
-	.col-1-2 {
-		width: 50%;
-	}
-	.col-1-3 {
-		width: 33.33%;
-	}
-	.col-1-4 {
-		width: 25%;
-	}
-	.col-1-8 {
-		width: 12.5%;
-	}
+	#main {margin: 0 1rem}
+	#clear-data {margin-left: 0.5rem}
 }
-.title {margin: 0; color: orange}
-.toolbar button {
-	background: rgba(0,0,0,0);
-	border: 0;
-}
-.listen, #info {margin: 0 auto;}
-.listen, #info {text-align: center}
-.listen img, #info img {max-width: 100px;}
-#news {height: 100%; background: #fff;}
-#index {
-	height: 100%;
-}
-
-/* Headers */
-#headers .content {
-	margin-top: -1.5rem;
-}
-#headers section[role="region"] {
-	margin-bottom: 1.5rem;
-}
-#headers section[role="region"]:not(#drawer) {
-	display: inline;
-}
-#headers article header:first-child {
-	margin-top: 1.5rem;
-}
-#headers section[role="region"] header h2 {
-	margin: 0 0 1.5rem 0;
-}
-
-/* Lists */
-/* to avoid double background effect on press */
-[data-type=list] li>a:active {
-	background-color: transparent;
-}
-
-/* Drawer */
-section[role="region"]:not(#drawer) {
-	transition: none;
-	left: 0;
-	z-index: 0;
-	padding-left: 0;
-}
-section[data-type="sidebar"] + section[role="region"] > header:first-child > button,
-section[data-type="sidebar"] + section[role="region"] > header:first-child > a {
-	background-position: 3.5rem center;
-}
-section[data-type="sidebar"], section[role="status"] {background: #1E0A3F !important}
-section[data-type="sidebar"] > nav > ul > li > a {border-bottom: 0.1rem solid #826BA9 !important}
-section[data-type="sidebar"] > nav > ul > li > a:hover {background: #826BA9 !important; border-bottom: 0.1rem solid #1E0A3F !important}
-
-/* Switches */
-#switches div:last-child label:last-child {
-	margin-left: 2rem;
-}
-#switches div:last-child {
-	margin-left: 2rem;
-}
-
-/* Scrolling */
-nav[data-type="scrollbar"] {
-	padding-top: 1rem;
-}
-nav[data-type="scrollbar"] p {
-	opacity: 1;
-}
-
-/* Seek bars */
-div[role="slider"] > label.icon {
-	background: no-repeat right top;
-	background-size: 3rem auto;
-}
-
-/* Tabs */
-#tabs .content {
-	padding: 0;
-}
-#tabs .content .content {
-	padding: 1.5rem 3rem;
-}
-
-/* Filters */
-[role="tablist"][data-type="filter"] {
-	margin-bottom: 2rem;
-}
-
-section[data-type="sidebar"] > nav > ul > li > a {
-	text-indent: 1rem;
-}
-[data-icon]:before { color: #FFF; }
-section[data-type="sidebar"] p { color: #FFF !important}
-#info-list button {
-	float: left;
-	display: inline;
-}
-#toolbar i {
-	display: inline-block;
-	vertical-align: middle;
-	line-height: normal;
-}
-[data-type="list"] .fa {
-	line-height: 6rem;
-	text-align: center;
-	display: block;
-	/*font-size: 3rem*/
-}
-#top-tabs {
-	position: fixed;
-	bottom:0;
-	left:0;
-}
-/* player buttons */
-#toolbar {
+#toolbar a, .share_buttons a, hr, #radio-control a {color: rgba(67, 33, 68, 0.8) !important}
+.title {margin: 0 0 0.5rem 0}
+h5 {margin: 0; font-size: 100%}
+#news, #search-results, #artist-grid {font-size: 80%;}
+#news .pure-u-1 {margin-left: 0.5rem;}
+#toolbar ul, .share_buttons ul, #radio-control ul {margin: 0; padding: 0;}
+#toolbar, #share_button {
 	list-style: none;
 	text-align: center;
 }
 
-#toolbar li {
+#toolbar li, .share_buttons li, #radio-control li {
 	position: relative;
 	display: inline-block;
-	margin-right: -4px;
+	margin: 0.5rem;
+	border: 0px;
 }
-#toolbar a {
-	display: block;
-	background-image: radial-gradient(circle at top left, #826BA9, #1E0A3F);
-	color: #DDD1F1;
-	margin-right: 5px;
-	width: 4rem;
-	height: 4rem;
-	position: relative;
-	text-align: center;
-	line-height: 4rem;
-	border-radius: 50%;
-	box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
-	font-size: 1rem;
-	vertical-align: middle;
-	text-shadow: #04000A 0px -1px 1px;
-}
-#toolbar a:hover{
+
+#toolbar a:hover i, #radio-control a:hover i{
 	text-decoration: none;
-	color: #826BA9;
-	background: #f5f5f5;
-	text-shadow: #04000A 0px 1px 0px;
-	box-shadow: none;
+	color: #4B294C;
+	background: transparent;
 }
-#header, section[data-type="sidebar"] header {
-	background-image: -moz-linear-gradient(top, #826BA9, #1E0A3F);
-	color: #DDD1F1;
-	text-shadow: #04000A 0px -1px 1px;
+
+#toolbar i, .share_buttons i, #radio-control i{
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 1rem;
+	text-align: center;
 }
-section[data-type="sidebar"] header {border-right: 0.1rem solid #826BA9 !important}
-#play {
-	width: 6rem !important;
-	height: 6rem !important;
-	line-height: 6rem !important;
-	font-size: 100% !important;
-}
+
+li div img {width: 3rem;}
 /* slider */
 [role="slider"] progress::-moz-progress-bar,
-input[type=range]::-moz-range-progress, #toolbar a {
-	background: #482E74;
+input[type=range]::-moz-range-progress, #btn-login, #saveconf {
+	background: #522A5B;
 }
 
 [role="slider"] button,
-	input[type="range"]::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb {
 	background:
-	radial-gradient(
+		radial-gradient(
 		circle at top,
-		#826BA9,
-		#1E0A3F
-	);
+		#693F6A,
+		#562E57
+		);
 	border: 0;
 }
 [role="slider"] > label {color: #1E0A3F}
-	[role="slider"] progress,
-	input[type="range"]::-moz-range-track {
-	background: #826BA9;
+[role="slider"] progress,
+input[type="range"]::-moz-range-track, hr {
+	background: #522A5B;
 }
-#seekbar, input {border: 0 !important}
+#header {margin: 1rem; padding: 0; border: 0}
+#album-art {max-width: 150px;}
+a {text-decoration: none}
+#radios a, .tab, #jamendo-top, .grid p, #username, #artist_name, .share_buttons {text-align: center;}
+#radios img, #jamendo-top img, .grid img, #info-top img, #artist_cover, #user_img {
+	display:block;
+	margin:auto;
+	border-radius: 1rem;
+	width: 6rem;
+	height: 6rem;
+}
+#top-list, #artist-albums p, #artist-tracks p {font-size: 70%;}
+@media all and ( max-width: 600px ) {
+	#radios img, #jamendo-top img, #search-results img, #artist-info img, #artist_cover, user_img {
+		width: 4rem;
+		height: 4rem;
+		border-radius: 0.5rem;
+	}
+	#main {margin: 0.5rem}
+	#artist_name {margin-top: 0.5rem}
+	input[type="text"] {width: 100%}
+	#clear-data {margin-top: 0.5rem}
+}
+.tab { margin-bottom: 1rem;}
+.tab.active {
+	border-bottom: 2px solid #522A5B;
+	pointer-events: none;
+	cursor: default;
+}
+.tab a {display: block;}
+input, .styled-select {border: 1px solid #432144 !important; border-radius: 10px;}
+input, .styled-select select {
+	background: transparent !important;
+	color: #432144;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+#search select {height: auto}
+
+.styled-select select {
+	width: 110%;
+	border: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
+	padding: 0.5rem;
+}
+
+.styled-select {
+   height: 34px;
+   overflow: hidden;
+   background: url("../img/arrow.png") no-repeat right transparent;
+   border: 0;
+}
+
+.styled-select select:focus {
+	outline: none;
+}
+#search input[type="text"] {
+	padding: 5px;
+	margin: 0;
+}
+
+#search button {
+	position: relative;
+	margin-left: -30px;
+	margin-top: 5px;
+	background-color: transparent;
+	border: 0;
+	color: #432144;
+}
+#search-form div {margin: 0.5rem;}
+#search-form {text-align: center}
+#info-top p {text-align: left}
+.share_buttons {margin-top: 0.5rem}
+#error {
+	width: 100%;
+	z-index: 2;
+	background: rgba(0, 0, 0, 0.7);
+	color: #fff;
+	padding: 1rem;
+	position: fixed;
+	bottom: 0;
+	display: none;
+}
+.form_error {border-color: #F00 !important;}
+#btn-login, #saveconf, #clear-data {color: #fff}
+#clear-data { background: rgb(202, 60, 60)}

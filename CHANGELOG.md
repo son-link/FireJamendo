@@ -22,3 +22,30 @@
 * Update manifest.webapp, README.md and this file.
 * Now you can read last news in Italian. If not avaliable show this in English
 * Other minor changes.
+
+## r5:
+* Added German location
+* Fix CSS and icons
+* Starting support for view artist and album information.
+
+##r6:
+* Fix German location in Jamendo feeds.
+* Beta for artist info.
+* Update English and Spanish locations.
+* Other minor changes.
+
+##r7:
+* Change interface. Building Blocks been replaced by Pure CSS.
+* Change xmlhttp for $.ajax for get data from the Jamendo API.
+* Delete unnecesary files
+* Many changes in javascript functions.
+* Update Spanish and English locations.
+* Other changes.
+
+##r8:
+* Now you can listen your favorites tracks, albums and artist from your Jamendo account.
+* Added share buttons. Share the track you are now listening or artist on Facebook, Twitter and Google+
+* Added show error messages function.
+* Added configuration page.
+* Updated Spanish and English locations.
+* Other changes and clean code.
