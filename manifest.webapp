@@ -37,10 +37,10 @@
 			"description": "Muzikludilo el Jamendo por Firefox OS kaj por retumilo Firefox",
 			"permissions": {
 				"systemXHR": {
-					"description":"Bezonata por atingi API-oj de Jamendo"
+					"description":"Bezonata por atingi API-ojn de Jamendo"
 				},
 				"backgroundservice": {
-					"description": "Bezonata por ruli FireJamendo fone"
+					"description": "Bezonata por ruli FireJamendon fone"
 				},
 					"audio-channel-content": {
 					"description": "Bezonata por ludi muzikon kiam FireJamendo rulas fone"
