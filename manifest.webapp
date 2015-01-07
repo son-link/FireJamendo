@@ -59,7 +59,7 @@
 				},
 					"audio-channel-content": {
 					"description": "Necesario para que FireJamendo se siga reproduciendo música en segundo plano."
-				},
+				}
 			}
 		},
 		"it": {

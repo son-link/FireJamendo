@@ -127,7 +127,9 @@ function notifyMe(body) {
 	else if (Notification.permission === 'granted') {
 		var notification = new Notification('Firejamendo', {'body': body, 'icon': playlist[currentTrack].image});
 		notification.onshow = function () {
-			setTimeout(notification.close.bind(notification), 5000);
+			setTimeout(function(){
+				notification.close.bind(notification)
+			}, 5000);
 		}
 	}
 	else if (Notification.permission !== 'denied') {
@@ -135,7 +137,9 @@ function notifyMe(body) {
 			if (permission === 'granted') {
 				var notification = new Notification('FireJamendo', {'body': body, 'icon': playlist[currentTrack].image});
 				notification.onshow = function () {
-					setTimeout(notification.close.bind(notification), 5000);
+					setTimeout(function(){
+						notification.close.bind(notification)
+					}, 5000);
 				}
 			}
 		});

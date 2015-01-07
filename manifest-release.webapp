@@ -22,11 +22,12 @@
 		"backgroundservice": {
 			"description": "Needed to run FireJamendo in background"
 		},
-			"audio-channel-content": {
+		"audio-channel-content": {
 			"description": "Needed to keep playing audio when FireJamendo is running on background"
 		},
-		"network-http": {},
-		"desktop-notification":{}
+		"desktop-notification":{
+			"description": "Needed for show the notifications"
+		}
 	},
 	"installs_allowed_from": [
 		"*"
@@ -55,11 +56,14 @@
 					"description":"Necesario para acceder a la API de Jamendo"
 				},
 				"backgroundservice": {
-					"description": "Necesario para que FireJamendo se siga ejecutando en segundo plano."
+					"description": "Necesario para que FireJamendo se siga ejecutando en segundo plano"
 				},
 					"audio-channel-content": {
-					"description": "Necesario para que FireJamendo se siga reproduciendo música en segundo plano."
+					"description": "Necesario para que FireJamendo se siga reproduciendo música en segundo plano"
 				},
+				"desktop-notification":{
+					"description": "Necesario para mostrar las notificaciones"
+				}
 			}
 		},
 		"it": {
