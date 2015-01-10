@@ -1,7 +1,7 @@
 {
-	"version": "r9",
+	"version": "3.0.0",
 	"name": "FireJamendo",
-	"description": "Jamendo player for Firefox OS and Firefox web browser. Beta version.",
+	"description": "Jamendo player for Firefox OS and Firefox web browser",
 	"launch_path": "/index.html",
 	"icons": {
 		"16": "/img/icons/icon16x16.png",
@@ -22,18 +22,19 @@
 		"backgroundservice": {
 			"description": "Needed to run FireJamendo in background"
 		},
-			"audio-channel-content": {
+		"audio-channel-content": {
 			"description": "Needed to keep playing audio when FireJamendo is running on background"
 		},
-		"network-http": {},
-		"desktop-notification":{}
+		"desktop-notification":{
+			"description": "Needed for show the notifications"
+		}
 	},
 	"installs_allowed_from": [
 		"*"
 	],
 	"locales": {
 		"eo": {
-			"name": "FireJamendo",
+			"name": "FireJamendo (Beta)",
 			"description": "Muzikludilo el Jamendo por Firefox OS kaj por retumilo Firefox",
 			"permissions": {
 				"systemXHR": {
@@ -48,22 +49,25 @@
 			}
 		},
 		"es": {
-			"name": "FireJamendo",
-			"description": "Reproductor de Jamendo para Firefox OS y para navegador Firefox. Versión Beta",
+			"name": "FireJamendo (Beta)",
+			"description": "Reproductor de Jamendo para Firefox OS y para navegador Firefox",
 			"permissions": {
 				"systemXHR": {
 					"description":"Necesario para acceder a la API de Jamendo"
 				},
 				"backgroundservice": {
-					"description": "Necesario para que FireJamendo se siga ejecutando en segundo plano."
+					"description": "Necesario para que FireJamendo se siga ejecutando en segundo plano"
 				},
 					"audio-channel-content": {
-					"description": "Necesario para que FireJamendo se siga reproduciendo música en segundo plano."
+					"description": "Necesario para que FireJamendo se siga reproduciendo música en segundo plano"
+				},
+				"desktop-notification":{
+					"description": "Necesario para mostrar las notificaciones"
 				}
 			}
 		},
 		"it": {
-			"name": "FireJamendo",
+			"name": "FireJamendo (Beta)",
 			"description": "Riproduttore di musica da Jamendo per Firefox OS per per il browser Firefox",
 			"permissions": {
 				"systemXHR": {

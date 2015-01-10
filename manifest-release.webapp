@@ -1,6 +1,6 @@
 {
 	"version": "r9",
-	"name": "FireJamendo",
+	"name": "FireJamendo (Beta)",
 	"description": "Jamendo player for Firefox OS and Firefox web browser. Beta version.",
 	"launch_path": "/index.html",
 	"icons": {
@@ -34,8 +34,8 @@
 	],
 	"locales": {
 		"eo": {
-			"name": "FireJamendo",
-			"description": "Muzikludilo el Jamendo por Firefox OS kaj por retumilo Firefox",
+			"name": "FireJamendo (Beta)",
+			"description": "Muzikludilo el Jamendo por Firefox OS kaj por retumilo Firefox. Versio Beta",
 			"permissions": {
 				"systemXHR": {
 					"description":"Bezonata por atingi API-ojn de Jamendo"
@@ -49,7 +49,7 @@
 			}
 		},
 		"es": {
-			"name": "FireJamendo",
+			"name": "FireJamendo (Beta)",
 			"description": "Reproductor de Jamendo para Firefox OS y para navegador Firefox. Versión Beta",
 			"permissions": {
 				"systemXHR": {
@@ -67,8 +67,8 @@
 			}
 		},
 		"it": {
-			"name": "FireJamendo",
-			"description": "Riproduttore di musica da Jamendo per Firefox OS per per il browser Firefox",
+			"name": "FireJamendo (Beta)",
+			"description": "Riproduttore di musica da Jamendo per Firefox OS per per il browser Firefox, Versione Beta",
 			"permissions": {
 				"systemXHR": {
 					"description":"Necessario per accedere alle API di Jamendo"
