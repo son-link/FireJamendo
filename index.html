@@ -12,6 +12,8 @@
 		<link href="fonts.css" rel="stylesheet" type="text/css">
 		<link href="css/pure-min.css" rel="stylesheet" type="text/css">
 		<link href="css/side-menu.css" rel="stylesheet" type="text/css">
+		<link href="css/fontello-embedded.css" rel="stylesheet" type="text/css">
+		<link href="css/animation.css" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="css/grids-responsive-min.css">
 		<link rel="stylesheet" href="css/fira.css">
 </head>
@@ -25,14 +27,15 @@
 			<div class="pure-menu pure-menu-open">
 				<a href="#" class="pure-menu-heading">FireJamendo</a>
 				<ul>
-					<li><a href="#" id="btn-news"><i class="fa fa-rss"></i><span data-l10n-id="news"></span></a></li>
-					<li><a href="#" id="btn-now-listen"><i class="fa fa-headphones"></i><span data-l10n-id="now-listen"></span></a></li>
-					<li><a href="#" id="btn-radios"><i class="fa fa-microphone"></i><span data-l10n-id="radios"></span></a></li>
-					<li><a href="#" id="btn-top"><i class="fa fa-star"></i><span>Top</span></a></li>
-					<li><a href="#" id="btn-search"><i class="fa fa-search"></i><span data-l10n-id="search"></span></a></li>
-					<li><a href="#" id="btn-info"><i class="fa fa-info-circle"></i><span data-l10n-id="info"></span></a></li>
-					<li><a href="#" id="btn-profile"><i class="fa fa-user"></i><span data-l10n-id="profile"></span></a></li>
-					<li><a href="#" id="btn-config"><i class="fa fa-gear"></i><span data-l10n-id="config"></span></a></li>
+					<li><a href="#" id="btn-news"><i class="icon-newspaper"></i><span data-l10n-id="news"></span></a></li>
+					<li><a href="#" id="btn-now-listen"><i class="icon-headphones"></i><span data-l10n-id="now-listen"></span></a></li>
+					<li><a href="#" id="btn-radios"><i class="icon-mic"></i><span data-l10n-id="radios"></span></a></li>
+					<li><a href="#" id="btn-top"><i class="icon-award"></i><span>Top</span></a></li>
+					<li><a href="#" id="btn-search"><i class="icon-search"></i><span data-l10n-id="search"></span></a></li>
+					<li><a href="#" id="btn-artist-info"><i class="icon-info"></i><span data-l10n-id="artist-info"></span></a></li>
+					<li><a href="#" id="btn-album-info"><i class="icon-album"></i><span data-l10n-id="album-info"></span></a></li>
+					<li><a href="#" id="btn-profile"><i class="icon-user"></i><span data-l10n-id="profile"></span></a></li>
+					<li><a href="#" id="btn-config"><i class="icon-config"></i><span data-l10n-id="config"></span></a></li>
 				</ul>
 			</div>
 		</div>
@@ -41,14 +44,14 @@
 				<div class="pure-u-1" id="news"></div>
 				<div id="radios" data-type="list" class="pure-g"></div>
 				<div id="artist-info" class="pure-g">
-					<div id="info-top" style="margin-bottom: 0.5rem">
+					<div class="info-top" style="margin-bottom: 0.5rem">
 						<div class="pure-u-1"><img id="artist_cover" src="img/no-image.png"></div>
 						<div class="pure-u-1"><h5 id="artist_name"></h5></div>
 						<div class="share_buttons" data-type="artist">
 							<ul>
-								<li><a href="#" id="facebook"><i class="fa fa-facebook-square fa-2x"></i></a></li>
-								<li><a href="#" id="twitter"><i class="fa fa-twitter-square fa-2x"></i></a></li>
-								<li><a href="#" id="g+"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
+								<li><a href="#" id="facebook"><i class="icon-facebook icon-2x"></i></a></li>
+								<li><a href="#" id="twitter"><i class="icon-twitter icon-2x"></i></a></li>
+								<li><a href="#" id="g+"><i class="icon-gplus icon-2x"></i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -62,8 +65,24 @@
 					</div>
 					<div id="artist-albums" class="pure-g grid"></div>
 					<div id="artist-tracks" class="pure-g grid"></div>
-				</div><!--info-->
-				<div id="listen" style="text-align: center">
+				</div><!--artist info-->
+				<div id="album-info" class="pure-g">
+					<div class="info-top" style="margin-bottom: 0.5rem">
+						<div class="pure-u-1"><h5 id="album_artist"></h5></div>
+						<div class="pure-u-1"><img id="album_cover" src="img/no-image.png"></div>
+						<div class="pure-u-1"><h5 id="album_name"></h5></div>
+						<div class="pure-u-1"><a href="#" id="down_album" class="icon-download icon-2x"></a></div>
+						<div class="share_buttons" data-type="album">
+							<ul>
+								<li><a href="#" id="facebook"><i class="icon-facebook icon-2x"></i></a></li>
+								<li><a href="#" id="twitter"><i class="icon-twitter icon-2x"></i></a></li>
+								<li><a href="#" id="g+"><i class="icon-gplus icon-2x"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="pure-g"id="album-tracks"><ul class="pure-u-1"></ul></div>
+				</div><!--album info-->
+				<div id="now-listen" style="text-align: center">
 					<h5 id="track-name"></h5>
 					<img id="album-art" src="img/no-image.png">
 					<h5 id="artist"></h5>
@@ -75,25 +94,25 @@
 						</div>
 						<div id="toolbar">
 							<ul>
-								<li><a href="#" id="stop"><i class="fa fa-stop fa-2x"></i></a></li>
-								<li><a href="#" id="back"><i class="fa fa-fast-backward fa-2x"></i></a></li>
-								<li><a href="#" id="play"><i class="fa fa-play fa-2x"></i></a></li>
-								<li><a href="#" id="next"><i class="fa fa-fast-forward fa-2x"></i></a></li>
-								<li><a href="#" class="download" download><i class="fa fa-cloud-download fa-2x"></i></a></li>
+								<li><a href="#" id="stop"><i class="icon-stop icon-2x"></i></a></li>
+								<li><a href="#" id="back"><i class="icon-fast-bw icon-2x"></i></a></li>
+								<li><a href="#" id="play"><i class="icon-play icon-2x"></i></a></li>
+								<li><a href="#" id="next"><i class="icon-fast-fw icon-2x"></i></a></li>
+								<li><a href="#" class="download" download><i class="icon-download icon-2x"></i></a></li>
 							</ul>
 						</div>
 					</div>
 					<div id="radio-control">
 						<ul>
-							<li><a href="#" id="play-radio"><i class="fa fa-play fa-2x"></i></a></li>
-							<li><a href="#" class="download" download><i class="fa fa-cloud-download fa-2x"></i></a></li>
+							<li><a href="#" id="play-radio"><i class="icon-play icon-2x"></i></a></li>
+							<li><a href="#" class="download" download><i class="icon-download icon-2x"></i></a></li>
 						</ul>
 					</div>
 					<div class="share_buttons" data-type="now-listen">
 						<ul>
-							<li><a href="#" id="facebook"><i class="fa fa-facebook-square fa-2x"></i></a></li>
-							<li><a href="#" id="twitter"><i class="fa fa-twitter-square fa-2x"></i></a></li>
-							<li><a href="#" id="g+"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
+							<li><a href="#" id="facebook"><i class="icon-facebook icon-2x"></i></a></li>
+							<li><a href="#" id="twitter"><i class="icon-twitter icon-2x"></i></a></li>
+							<li><a href="#" id="g+"><i class="icon-gplus icon-2x"></i></a></li>
 						</ul>
 					</div>
 					<section role="status" id="status"></section>
@@ -116,7 +135,7 @@
 					<form id="search-form">
 						<div class="pure-g">
 							<div style="margin: 0">
-								<input placeholder="..." type="text" id="search-input" class="pure-u-1 pure-u-lg-3-5"><button id="search-btn"><i class="fa fa-search"></i></button>
+								<input placeholder="..." type="text" id="search-input" class="pure-u-1 pure-u-lg-3-5"><button id="search-btn"><i class="icon-search"></i></button>
 							</div>
 							<div class="styled-select pure-u-1 pure-u-lg-1-5">
 								<select id="search-by">
@@ -211,7 +230,7 @@
 							<label for="profile-orderby" data-l10n-id="format"></label>
 							<div class="styled-select pure-u-1 pure-u-lg-1-5">
 								<select id="down_format">
-									<option value="ogg">OGG</option>
+									<option value="ogg1">OGG</option>
 									<option value="mp31">MP3 (96kbs)</option>
 									<option value="mp32">MP3 (VBR)</option>
 								</select>
@@ -224,6 +243,8 @@
 						<input type="text" id="share_track" />
 						<label for="share_artist" data-l10n-id="share-artist-help"></label>
 						<input type="text" id="share_artist" />
+						<label for="share_album" data-l10n-id="share-album-help"></label>
+						<input type="text" id="share_album" />
 					</fieldset>
 					<fieldset>
 						<legend data-l10n-id="notifications"></legend>
@@ -234,17 +255,18 @@
 					</fieldset>
 				</form>
 				<div class="pure-g">
-					<button class="pure-button pure-u" id="saveconf"><i class="fa fa-save"></i> <span data-l10n-id="save-conf"></span></button>
-					<button class="pure-button pure-u" id="clear-data"><i class="fa fa-eraser"></i> <span data-l10n-id="clear-data"></span></button>
+					<button class="pure-button pure-u" id="saveconf"><i class="icon-save"></i> <span data-l10n-id="save-conf"></span></button>
+					<button class="pure-button pure-u" id="clear-data"><i class="icon-clear"></i> <span data-l10n-id="clear-data"></span></button>
 				</div>
 
 			</div>
 		</div> <!-- end drawer -->
 		<div id="error"></div>
+
 	</div> <!-- end index -->
+	<div id="loading"><img src="img/loading.gif" /></div>
 	<script type="text/javascript" src="js/l10n.js" defer></script>
 	<script type="text/javascript" src="js/firejamendo.js" defer></script>
-	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/firejamendo.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" defer src="js/ui.js"></script>
 	<audio src="" id="player" preload="none"></audio>

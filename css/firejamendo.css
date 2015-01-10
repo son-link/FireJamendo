@@ -10,7 +10,7 @@ body, .header, legend {color: #432144 !important;}
 h5 {margin: 0; font-size: 100%}
 #news, #search-results, #artist-grid {font-size: 80%;}
 #news .pure-u-1 {margin-left: 0.5rem;}
-#toolbar ul, .share_buttons ul, #radio-control ul, #user-playlists ul {margin: 0; padding: 0;}
+#toolbar ul, .share_buttons ul, #radio-control ul, #user-playlists ul, .top-info, #album-tracks ul {margin: 0; padding: 0;}
 #toolbar, #share_button {
 	list-style: none;
 	text-align: center;
@@ -28,7 +28,6 @@ h5 {margin: 0; font-size: 100%}
 	color: #4B294C;
 	background: transparent;
 }
-
 #toolbar i, .share_buttons i, #radio-control i{
 	display: inline-block;
 	vertical-align: middle;
@@ -61,8 +60,8 @@ input[type="range"]::-moz-range-track, hr {
 #header {margin: 1rem; padding: 0; border: 0}
 #album-art {max-width: 150px;}
 a {text-decoration: none}
-#radios a, .tab, #jamendo-top, .grid p, #username, #artist_name, .share_buttons {text-align: center;}
-#radios img, #jamendo-top img, .grid img, #info-top img, #artist_cover, #user_img {
+#radios a, .tab, #jamendo-top, .grid p, #username, #artist_name, .share_buttons, .info-top {text-align: center;}
+#radios img, #jamendo-top img, .grid img, .info-top img, #artist_cover, #user_img {
 	display:block;
 	margin:auto;
 	border-radius: 1rem;
@@ -71,7 +70,7 @@ a {text-decoration: none}
 }
 #top-list, #artist-albums p, #artist-tracks p {font-size: 70%;}
 @media all and ( max-width: 600px ) {
-	#radios img, #jamendo-top img, #search-results img, #artist-info img, #artist_cover, user_img {
+	#radios img, #jamendo-top img, #search-results img, #artist-info img, #artist_cover, user_img, #album_cover {
 		width: 4rem;
 		height: 4rem;
 		border-radius: 0.5rem;
@@ -146,4 +145,16 @@ input, .styled-select select {
 .form_error {border-color: #F00 !important;}
 #btn-login, #saveconf, #clear-data {color: #fff}
 #clear-data { background: rgb(202, 60, 60)}
-#user-playlists li {display: block; margin: 0.5rem; border-bottom: 1px solid #522A5B; font-weight: bold;}
+#user-playlists li, #album-tracks li {display: block; margin: 0.5rem; border-bottom: 1px solid #522A5B; font-weight: bold; width: 100%}
+/* Loading icon */
+#loading {
+	z-index: 5;
+	font-size: 3rem;
+	position:absolute;
+	left:50%;
+	top:50%;
+	margin-left:-1rem;
+	padding: 0;
+}
+[class^="icon-"]::before, [class*=" icon-"]::before {margin: 0 !important}
+.icon-2x {font-size: 200%}

@@ -11,9 +11,11 @@ var artist_albums = {};
 var artist_tracks = {};
 var user_tracks = {};
 var top_tracks = {};
+var album_tracks = {};
 var access_token;
 var radio_interval;
 var artist_id = 0;
+var album_id = 0;
 // For localizing strings in JavaScript
 var _ = navigator.mozL10n.get;
 navigator.mozL10n.once(start);
@@ -51,6 +53,7 @@ if (!String.prototype.format) {
 
 function getData(params, cb){
 	// Get data from Jamendo API
+	$('#loading').show();
 	if (params.search(/\?/) == -1){
 		params += '?client_id='+client_id;
 	}else{
@@ -61,9 +64,11 @@ function getData(params, cb){
 		type: 'GET',
 		dataType: 'json',
 		error: function(xhr, status, error) {
+			$('#loading').hide();
 			onError(_('data_error'));
 		},
 		success: function(jsonp) {
+			$('#loading').hide();
 			cb(jsonp);
 		}
 	});
@@ -71,7 +76,7 @@ function getData(params, cb){
 
 function changeDIV(div){
 	// hidde all the divs except the especific
-	divs = ['radios', 'news', 'artist-info', 'listen', 'jamendo-top', 'search', 'profile', 'config'];
+	divs = ['radios', 'news', 'artist-info', 'now-listen', 'jamendo-top', 'search', 'profile', 'config', 'album-info'];
 	for (i=0; i < divs.length; i++){
 		if (div == divs[i]){
 			$('#'+div).show();
@@ -106,9 +111,10 @@ function setConfig(reset){
 	window.localStorage.top_orderby = "popularity_total";
 	window.localStorage.profile_limit = 10;
 	window.localStorage.top_limit = 10;
-	window.localStorage.down_format = "ogg";
+	window.localStorage.down_format = "ogg1";
 	window.localStorage.share_track = _('share-track');
 	window.localStorage.share_artist = _('share-artist');
+	window.localStorage.share_album = _('share-album');
 	window.localStorage.notification_msg = _('notification-msg');
 	window.localStorage.show_notifications = true;
 	if (reset){
@@ -125,21 +131,19 @@ function notifyMe(body) {
 		alert('This browser does not support desktop notification');
 	}
 	else if (Notification.permission === 'granted') {
-		var notification = new Notification('Firejamendo', {'body': body, 'icon': playlist[currentTrack].image});
-		notification.onshow = function () {
-			setTimeout(function(){
-				notification.close.bind(notification)
-			}, 5000);
+		var notification = new Notification('Firejamendo', {'body': body, 'icon': playlist[currentTrack].image, tag: 'firejamendo'});
+		notification.onclick = function(){
+			$('#section-title').text(_('now-listen'));
+			changeDIV('now-listen');
 		}
 	}
 	else if (Notification.permission !== 'denied') {
 		Notification.requestPermission(function (permission) {
 			if (permission === 'granted') {
-				var notification = new Notification('FireJamendo', {'body': body, 'icon': playlist[currentTrack].image});
-				notification.onshow = function () {
-					setTimeout(function(){
-						notification.close.bind(notification)
-					}, 5000);
+				var notification = new Notification('FireJamendo', {'body': body, 'icon': playlist[currentTrack].image, tag: 'firejamendo'});
+				notification.onclick = function(){
+					$('#section-title').text(_('now-listen'));
+					changeDIV('now-listen');
 				}
 			}
 		});
@@ -156,6 +160,7 @@ function startPlay(){
 	player.src = playlist[currentTrack].audio;
 	player.setAttribute('mozaudiochannel', 'content');
 	player.load();
+	player.play();
 	$('#track-name').text(playlist[currentTrack].track_name);
 	$('#artist').text(playlist[currentTrack].artist_name);
 	notifyMsg = playlist[currentTrack].artist_name+' - '+playlist[currentTrack].track_name;
@@ -169,8 +174,8 @@ function startPlay(){
 	}
 	$('.download').attr('href', 'https://storage-new.newjamendo.com/download/track/{0}/{1}/'.format(playlist[currentTrack].track_id, window.localStorage.down_format));
 
-	$('#play i').removeClass('fa-play')
-	$('#play i').addClass('fa-pause');
+	$('#play i').removeClass('icon-play')
+	$('#play i').addClass('icon-pause');
 	var seekbar = document.getElementById('seekbar');
 	seekbar.addEventListener("change", function(){
 		player.currentTime = seekbar.value;
@@ -189,41 +194,50 @@ function startPlay(){
 			seekbar.value = 0;
 			currentTrack = 0;
 			$('#current-time').text('00:00');
-			$('#play i').removeClass('fa-pause')
-			$('#play i').addClass('fa-play');
+			$('#play i').removeClass('icon-pause')
+			$('#play i').addClass('icon-play');
 		}else{
 			player.removeEventListener('ended', _func);
 			nextTrack();
 		}
 	});
 	player.addEventListener("error", function(e){
-		if (window.location.protocol != "app:"){
-			console.error(e);
-			onError(_('stream_error'));
-		}
+		console.error(e);
+		onError(_('stream_error'));
+		clearInterval(radio_interval);
+		player.pause();
+		player.src = '';
 	});
 	player.addEventListener('mozinterruptbegin', function onInterrupted(e) {
 		console.error(e);
 	});
-	player.play();
 }
 
 function getAlbum(id){
 	// get album
+	changeDIV('album-info')
+	$('#section-title').text(_('album-info'));
 	getData('albums/tracks?audioformat=ogg&id='+id, function(responseText) {
 		data = responseText.results[0];
-		playlist = {};
+		album_tracks = {};
+		album_id = id;
+		$('#album-tracks ul').empty();
+		cover = ''
+		if (data.image){
+			cover = data.image;
+		}else{
+			cover = 'img/no-image.png';
+		}
+		$('#album_cover').attr('src', cover);
+		$('#album_name').text(data.name);
+		$('#album_artist').text(data.artist_name);
+		$('#down_album').attr('href', 'https://storage-new.newjamendo.com/download/a{0}/{1}/'.format(id, window.localStorage.down_format));
 		for (i=0; i<data.tracks.length; i++){
 			track_name = data.tracks[i].name;
 			audio = data.tracks[i].audio;
-			playlist[i] = {"artist_name": data.artist_name, "album_name": data.name, "track_name": track_name, "image": data.image, "audio": audio, 'track_id': data.tracks[i].id};
+			album_tracks[i] = {"artist_name": data.artist_name, "album_name": data.name, "track_name": track_name, "image": cover, "audio": audio, 'track_id': data.tracks[i].id};
+			$('#album-tracks ul').append('<li><p><a href="#" data-album-track="{0}">{1}</a></p></li>'.format(i, track_name));
 		}
-		$('#controls').show();
-		$('#radio-control').hide();
-		$('#section-title').text(_('now-listen'));
-		changeDIV('listen');
-		currentTrack = 0;
-		startPlay();
 	});
 }
 function getPlaylist(id, inport){
@@ -235,7 +249,7 @@ function getPlaylist(id, inport){
 			for (i=0; i<data.tracks.length; i++){
 				track_name = data.tracks[i].name;
 				audio = data.tracks[i].audio;
-				playlist[i] = {"artist_name": data.tracks[i].artist_name, "track_name": track_name, "image": data.tracks[i].album_image, "audio": audio, 'track_id': data.tracks[i].id};
+				playlist[i] = {"artist_name": data.tracks[i].artist_name, "track_name": track_name, "image": data.tracks[i].album_image, "audio": audio, 'track_id': data.tracks[i].id, "album_name": data.tracks[i].name};
 			}
 			$('#controls').show();
 			$('#radio-control').hide();
@@ -277,15 +291,15 @@ function getArtistTracks(id, cb){
 }
 function getRadioStream(id){
 	// get Radio Stream
-	changeDIV('listen');
+	changeDIV('now-listen');
 	$('#section-title').text(_('now-listen'));
 	if (currentRadio != id || player.src != ''){
 		clearInterval(radio_interval);
 		currentRadio = id;
 		getData('radios/stream?id='+id, function(responseText) {
 			playlist = {};
-			$('#play-radio i').removeClass('fa-play');
-			$('#play-radio i').addClass('fa-pause');
+			$('#play-radio i').removeClass('icon-play');
+			$('#play-radio i').addClass('icon-pause');
 			data = responseText.results[0];
 			playlist[0] = {"artist_name": data.playingnow.artist_name, "track_name": data.playingnow.track_name, "image": data.playingnow.track_image, "audio": data.stream, "album_name": data.playingnow.album_name, 'track_id': data.playingnow.track_id};
 			$('#controls').hide();
@@ -315,9 +329,12 @@ function getTrack(id){
 	getData('artists/tracks?audioformat=ogg&imagesize=100&track_id='+id, function(responseText) {
 		data = responseText.results[0].tracks[0];
 		playlist = {};
-		playlist[0] = {"artist_name": data.name, "track_name": data.track_name, "image": data.album_image, "audio": data.audio, "album_name": data.album_name, 'download': data.audiodownload, 'track_id': data.id};
+		currentTrack = 0;
+		playlist[0] = {"artist_name": responseText.results[0].name, "track_name": data.track_name, "image": data.album_image, "audio": data.audio, "album_name": data.album_name, 'download': data.audiodownload, 'track_id': data.id};
 		$('#controls').show();
 		$('#radio-control').hide();
+		changeDIV('now-listen');
+		$('#section-title').text(_('now-listen'));
 		startPlay();
 	});
 }
@@ -569,7 +586,13 @@ function getUserData(){
 	getData('users/tracks?access_token='+window.localStorage.access_token, function(responseText){
 		data = responseText.results[0];
 		for (i=0; i<data.tracks.length; i++){
-
+			cover = ''
+			if (data.tracks[i].album_image){
+				cover = data.tracks[i].album_image;
+			}else{
+				cover = 'img/no-image.png';
+			}
+			user_tracks[i] = {"artist_name": data.tracks[i].artist_name, "track_name": data.tracks[i].name, "image": cover, "audio": data.tracks[i].audio, "album_name":data.tracks[i].album_name, 'track_id': data.tracks[i].id}
 			$('#user-tracks').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" track-id="{0}"><img src="{1}" class="pure-img" data-type="user-track"><p><b>{2}</b><br/>{3}</p></a></div>'.format(i, cover, data.tracks[i].name, data.tracks[i].artist_name));
 		}
 	});
@@ -577,7 +600,7 @@ function getUserData(){
 		data = responseText.results;
 		$('#user-playlists ul').empty();
 		for (i=0; i<data.length; i++){
-			$('#user-playlists ul').append('<li><p><a href="#" playlist-id="{0}" data-type="inport"><i class="fa fa-cloud-download"></i></a> <a href="#" playlist-id="{0}">{1}</a></p></li>'.format(data[i].id, data[i].name));
+			$('#user-playlists ul').append('<li><p><a href="#" playlist-id="{0}" data-type="inport"><i class="fa icon-download"></i></a> <a href="#" playlist-id="{0}">{1}</a></p></li>'.format(data[i].id, data[i].name));
 		}
 	});
 }
@@ -592,11 +615,14 @@ function share(web, type){
 	}else if (type == 'artist' && artist_id != 0){
 		url = 'http://jamen.do/a/'+artist_id
 		msg = window.localStorage.share_artist.format($('#artist_name').text());
+	}else if (type == 'album' && album_id != 0){
+		url = 'http://jamen.do/l/a'+album_id;
+		msg = window.localStorage.share_album.format($('#album_name').text(), $('#album_artist').text());
 	}else{
 		return false;
 	}
 	if (web == 'twitter'){
-		ShareUrl = 'http://twitter.com/intent/tweet?text='+msg+'&url='+url;
+		ShareUrl = 'http://twitter.com/intent/tweet?text='+encodeURIComponent(msg)+'&url='+url;
 	}else if (web == 'facebook'){
 		ShareUrl = 'http://www.facebook.com/sharer/sharer.php?u='+url;
 	}else if (web == 'g+'){
@@ -617,6 +643,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		type = $(this).attr('data-type');
 		if (player){
 			player.pause();
+			changeDIV('now-listen');
 		}
 		if (type == 'album'){
 			getAlbum(id);
@@ -626,8 +653,8 @@ document.addEventListener('DOMContentLoaded', function(){
 			getArtistTrackst(id, function(data){
 				playlist = data;
 			});
+			changeDIV('now-listen');
 		}
-		changeDIV('listen');
 	});
 	$("#radios").delegate('a', 'click', function() {
 		id = $(this).attr('id');
@@ -648,16 +675,16 @@ document.addEventListener('DOMContentLoaded', function(){
 			$('#section-title').text(_('now-listen'));
 			$('#controls').show();
 			$('#radio-control').hide();
-			changeDIV('listen');
+			changeDIV('now-listen');
 		}
 	});
 
 	$('#search-results').delegate('a', 'click', function(){
 		id = $(this).attr('data-id');
 		type = $(this).attr('data-type');
-		if (type == 'album'){
+		if (type == 'albums'){
 			getAlbum(id);
-		}else if (type == 'track'){
+		}else if (type == 'tracks'){
 			getTrack(id);
 		}else{
 			getArtistData(id);
@@ -676,12 +703,11 @@ document.addEventListener('DOMContentLoaded', function(){
 		$('#section-title').text(_('now-listen'));
 		$('#controls').show();
 		$('#radio-control').hide();
-		changeDIV('listen');
+		changeDIV('now-listen');
 		startPlay();
 	});
 	$('#artist-albums, #user-albums').delegate('a', 'click', function(){
 		$('#section-title').text(_('now-listen'));
-		changeDIV('listen');
 		getAlbum(parseInt($(this).attr('album-id')));
 	});
 
@@ -692,11 +718,17 @@ document.addEventListener('DOMContentLoaded', function(){
 		}else{
 			getPlaylist(id);
 			$('#section-title').text(_('now-listen'));
-			changeDIV('listen');
+			changeDIV('now-listen');
 		}
 	});
+	$('#album-tracks ul').delegate('a', 'click', function(){
+		currentTrack = parseInt($(this).attr('data-album-track'));
+		playlist = album_tracks;
+		$('#section-title').text(_('now-listen'));
+		changeDIV('now-listen');
+		startPlay();
+	});
 
-	// need for translate the app
 });
 
 $('#menu ul li a').click(function(){
@@ -706,7 +738,7 @@ $('#menu ul li a').click(function(){
 });
 
 $('#btn-now-listen').click(function () {
-	changeDIV('listen');
+	changeDIV('now-listen');
 	$('#section-title').text(_('now-listen'));
 });
 
@@ -729,7 +761,7 @@ $('#btn-top').click( function () {
 	changeDIV('jamendo-top');
 });
 
-$('#btn-info').click( function () {
+$('#btn-artist-info').click( function () {
 	$('#section-title').text(_('artist'));
 	changeDIV('artist-info');
 });
@@ -745,8 +777,8 @@ $('#btn-search').click( function () {
 });
 $('#play, #play-radio').click( function () {
 	if (player.paused){
-		$('i', this).removeClass('fa-play');
-		$('i', this).addClass('fa-pause');
+		$('i', this).removeClass('icon-play');
+		$('i', this).addClass('icon-pause');
 		if ($(this).attr('id') == 'play-radio'){
 			player.src = '';
 			getRadioStream(currentRadio);
@@ -758,8 +790,8 @@ $('#play, #play-radio').click( function () {
 			clearInterval(radio_interval);
 		}
 		player.pause();
-		$('i', this).removeClass('fa-pause')
-		$('i', this).addClass('fa-play');
+		$('i', this).removeClass('icon-pause')
+		$('i', this).addClass('icon-play');
 	}
 });
 
@@ -771,10 +803,8 @@ $('#next').click( function () {
 
 $('#stop').click( function () {
 	if (player){
-		if (player.paused){
-			$('#play i').removeClass('fa-pause')
-			$('#play i').addClass('fa-play');
-		}
+		$('#play i').removeClass('icon-pause')
+		$('#play i').addClass('icon-play');
 		player.pause();
 		seekbar.value = 0;
 		player.currentTime = 0;
@@ -827,6 +857,11 @@ $('#btn-config').click(function(){
 	changeDIV('config');
 });
 
+$('#btn-album-info').click( function () {
+	$('#section-title').text(_('album-info'));
+	changeDIV('album-info');
+});
+
 $('#artist-tabs .tab a').click(function(){
 	tab = $(this).attr('data-tab');
 	changeTab(tab, ['artist-tracks', 'artist-albums']);
@@ -853,6 +888,7 @@ $('#saveconf').click(function(e){
 					onError(_('limit_error'));
 					return false
 				}else{
+					window.localStorage[this.id] = this.value;
 					$(this).removeClass('form_error');
 				}
 			}else if (this.id == 'show_notifications'){
