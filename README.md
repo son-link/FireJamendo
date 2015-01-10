@@ -20,23 +20,30 @@ You can read a copy of the licence in the [LICENCE](https://github.com/son-link/
 
 - [FireJamendo](http://son-link.github.io/FireJamendo)
 - [Repository](http://github.com/son-link/FireJamendo)
+- [App on Firefox Marketplace (stable version)](https://marketplace.firefox.com/app/firejamendo)
 
 ## Captures
 
 **Main page and last news**
+
 ![Main page and news](https://dl.dropboxusercontent.com/u/58286032/capturas/FireJamendo/main_page_news.png)
 
 **Menu**
+
 ![Menu](https://dl.dropboxusercontent.com/u/58286032/capturas/FireJamendo/menu.png)
 
 **Config**
+
 ![Main window and news](https://dl.dropboxusercontent.com/u/58286032/capturas/FireJamendo/config.png)
 
 **Now listen**
+
 ![Main window and news](https://dl.dropboxusercontent.com/u/58286032/capturas/FireJamendo/now_listen.png)
 
 **Radios list**
+
 ![Main window and news](https://dl.dropboxusercontent.com/u/58286032/capturas/FireJamendo/radios.png)
 
 **Jamendo profile**
+
 ![Main window and news](https://dl.dropboxusercontent.com/u/58286032/capturas/FireJamendo/profile.png)
