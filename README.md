@@ -47,3 +47,12 @@ You can read a copy of the licence in the [LICENCE](https://github.com/son-link/
 **Jamendo profile**
 
 ![Main window and news](https://dl.dropboxusercontent.com/u/58286032/capturas/FireJamendo/profile.png)
+
+##Thanks to:
+
+* **Michael Moroni** for Italian and Esperanto location, also correct English location too.
+* **Maximilian Weißl** for German location
+* **Fabián PS** for app icon and fixed css colors
+* and all that you're down and using this project
+
+Happy listening ;)
