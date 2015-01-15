@@ -25,7 +25,7 @@
 		"audio-channel-content": {
 			"description": "Needed to keep playing audio when FireJamendo is running on background"
 		},
-		"desktop-notification":{
+		"desktop-notification": {
 			"description": "Needed for show the notifications"
 		}
 	},
@@ -35,7 +35,7 @@
 	"locales": {
 		"eo": {
 			"name": "FireJamendo (Beta)",
-			"description": "Muzikludilo el Jamendo por Firefox OS kaj por retumilo Firefox. Versio Beta",
+			"description": "Muzikludilo el Jamendo por Firefox OS kaj por retumilo Firefox. Beta versio.",
 			"permissions": {
 				"systemXHR": {
 					"description":"Bezonata por atingi API-ojn de Jamendo"
@@ -45,12 +45,15 @@
 				},
 					"audio-channel-content": {
 					"description": "Bezonata por ludi muzikon kiam FireJamendo rulas fone"
+				},
+				"desktop-notification":{
+					"description": "Bezonata por montri atentigojn"
 				}
 			}
 		},
 		"es": {
 			"name": "FireJamendo (Beta)",
-			"description": "Reproductor de Jamendo para Firefox OS y para navegador Firefox. Versión Beta",
+			"description": "Reproductor de Jamendo para Firefox OS y para navegador Firefox. Versión Beta.",
 			"permissions": {
 				"systemXHR": {
 					"description":"Necesario para acceder a la API de Jamendo"
@@ -68,7 +71,7 @@
 		},
 		"it": {
 			"name": "FireJamendo (Beta)",
-			"description": "Riproduttore di musica da Jamendo per Firefox OS per per il browser Firefox, Versione Beta",
+			"description": "Riproduttore di musica da Jamendo per Firefox OS per per il browser Firefox. Versione beta.",
 			"permissions": {
 				"systemXHR": {
 					"description":"Necessario per accedere alle API di Jamendo"
@@ -78,6 +81,9 @@
 				},
 				"audio-channel-content": {
 					"description": "Necessario per far continuare la musica quando FireJamendo è in background"
+				},
+				"desktop-notification":{
+					"description": "Necessario per mostrare le notifiche"
 				}
 			}
 		}
