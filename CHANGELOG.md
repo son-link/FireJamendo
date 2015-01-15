@@ -23,7 +23,7 @@
 * Now you can read last news in Italian. If not avaliable show this in English
 * Other minor changes.
 
-## r5:
+##r5:
 * Added German location
 * Fix CSS and icons
 * Starting support for view artist and album information.
@@ -55,3 +55,9 @@
 * Now change browser title with the actual track and artist playing.
 * Other changes.
 * And a happy new year 2015 ;)
+
+##r10 (0.5.0):
+* Change Awesome Fonts by Fontello. This single contains the necessary icons.
+* Adding Album information and share on social networks.
+* Adding loading icon.
+* As always, updated locations and fix some bugs.

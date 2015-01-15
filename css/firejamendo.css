@@ -4,6 +4,7 @@ body, .header, legend {color: #432144 !important;}
 @media all and ( min-width: 600px ) {
 	#main {margin: 0 1rem}
 	#clear-data {margin-left: 0.5rem}
+	.tab {font-size: 200%}
 }
 #toolbar a, .share_buttons a, hr, #radio-control a {color: rgba(67, 33, 68, 0.8) !important}
 .title {margin: 0 0 0.5rem 0}
