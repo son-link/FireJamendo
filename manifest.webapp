@@ -1,5 +1,5 @@
 {
-	"version": "3.0.0",
+	"version": "0.5.1",
 	"name": "FireJamendo",
 	"description": "Jamendo player for Firefox OS and Firefox web browser",
 	"launch_path": "/index.html",

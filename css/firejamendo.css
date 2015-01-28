@@ -142,6 +142,10 @@ input, .styled-select select {
 	position: fixed;
 	bottom: 0;
 	display: none;
+	transition: all 2s linear;
+}
+#error .show {
+	display:block;
 }
 .form_error {border-color: #F00 !important;}
 #btn-login, #saveconf, #clear-data {color: #fff}
@@ -159,3 +163,4 @@ input, .styled-select select {
 }
 [class^="icon-"]::before, [class*=" icon-"]::before {margin: 0 !important}
 .icon-2x {font-size: 200%}
+#radio-control {display: none}

@@ -16,6 +16,7 @@ var access_token;
 var radio_interval;
 var artist_id = 0;
 var album_id = 0;
+var qs = function(selector) {return document.querySelector(selector)}
 // For localizing strings in JavaScript
 var _ = navigator.mozL10n.get;
 navigator.mozL10n.once(start);
@@ -25,6 +26,7 @@ function start() {
 		// Need for translate to all Spanish variants (es-ES, es-AR, es-MX, etc) on Firefox web browser
 		navigator.mozL10n.language.code = 'es';
 	}
+	getNews();
 }
 
 // Common functions
@@ -53,7 +55,8 @@ if (!String.prototype.format) {
 
 function getData(params, cb){
 	// Get data from Jamendo API
-	$('#loading').show();
+	//$('#loading').show();
+	qs('#loading').style.display = 'block';
 	if (params.search(/\?/) == -1){
 		params += '?client_id='+client_id;
 	}else{
@@ -64,11 +67,12 @@ function getData(params, cb){
 		type: 'GET',
 		dataType: 'json',
 		error: function(xhr, status, error) {
-			$('#loading').hide();
+			qs('#loading').style.display = 'none';
 			onError(_('data_error'));
 		},
 		success: function(jsonp) {
-			$('#loading').hide();
+			//$('#loading').hide();
+			qs('#loading').style.display = 'none';
 			cb(jsonp);
 		}
 	});
@@ -79,9 +83,11 @@ function changeDIV(div){
 	divs = ['radios', 'news', 'artist-info', 'now-listen', 'jamendo-top', 'search', 'profile', 'config', 'album-info'];
 	for (i=0; i < divs.length; i++){
 		if (div == divs[i]){
-			$('#'+div).show();
+			//$('#'+div).show();
+			qs('#'+div).style.display = 'block';
 		}else{
-			$('#'+divs[i]).hide();
+			//$('#'+divs[i]).hide();
+			qs('#'+divs[i]).style.display = 'none';
 		}
 	}
 }
@@ -90,10 +96,12 @@ function changeTab(tab, tabs){
 	// Change tab
 	for (i=0; i < tabs.length; i++){
 		if (tab == tabs[i]){
-			$('#'+tab).show();
+			//$('#'+tab).show();
+			qs('#'+tab).style.display = 'block';
 			$('a[data-tab="' + tab + '"]').parent().addClass('active');
 		}else{
-			$('#'+tabs[i]).hide();
+			//$('#'+tabs[i]).hide();
+			qs('#'+tabs[i]).style.display = 'none';
 			if ($('a[data-tab="' + tabs[i] + '"]').parent().hasClass('active')){
 				$('a[data-tab="' + tabs[i] + '"]').parent().toggleClass('active');
 			}
@@ -102,7 +110,13 @@ function changeTab(tab, tabs){
 }
 
 function onError(msg){
-	$('#error').show(500).delay(5000).fadeOut();
+	console.log(msg)
+	//$('#error').show(500).delay(5000).fadeOut();
+	qs('#error').style.display = 'block';
+   setTimeout(function () {
+		qs('#error').style.display = 'none';
+   }, 5000);
+	//$('#error').addClass('visuallyhidden');
 	$('#error').text(msg);
 }
 
@@ -245,14 +259,17 @@ function getPlaylist(id, inport){
 	if (! inport){
 		getData('playlists/tracks?audioformat=ogg&id='+id, function(responseText) {
 			playlist = {};
+			currentTrack = 0;
 			data = responseText.results[0];
 			for (i=0; i<data.tracks.length; i++){
 				track_name = data.tracks[i].name;
 				audio = data.tracks[i].audio;
 				playlist[i] = {"artist_name": data.tracks[i].artist_name, "track_name": track_name, "image": data.tracks[i].album_image, "audio": audio, 'track_id': data.tracks[i].id, "album_name": data.tracks[i].name};
 			}
-			$('#controls').show();
-			$('#radio-control').hide();
+			//$('#controls').show();
+			//$('#radio-control').hide();
+			qs('#controls').style.display = 'block';
+			qs('#radio-control').style.display = 'none';
 			startPlay();
 		});
 	}else{
@@ -302,8 +319,10 @@ function getRadioStream(id){
 			$('#play-radio i').addClass('icon-pause');
 			data = responseText.results[0];
 			playlist[0] = {"artist_name": data.playingnow.artist_name, "track_name": data.playingnow.track_name, "image": data.playingnow.track_image, "audio": data.stream, "album_name": data.playingnow.album_name, 'track_id': data.playingnow.track_id};
-			$('#controls').hide();
-			$('#radio-control').show();
+			//$('#controls').hide();
+			//$('#radio-control').show();
+			qs('#controls').style.display = 'none';
+			qs('#radio-control').style.display = 'block';
 			// set interval for get the next track info
 			radio_interval = setInterval(function(){
 				getRadioStream(id)
@@ -331,8 +350,10 @@ function getTrack(id){
 		playlist = {};
 		currentTrack = 0;
 		playlist[0] = {"artist_name": responseText.results[0].name, "track_name": data.track_name, "image": data.album_image, "audio": data.audio, "album_name": data.album_name, 'download': data.audiodownload, 'track_id': data.id};
-		$('#controls').show();
-		$('#radio-control').hide();
+		//$('#controls').show();
+		//$('#radio-control').hide();
+		qs('#controls').style.display = 'block';
+		qs('#radio-control').style.display = 'none';
 		changeDIV('now-listen');
 		$('#section-title').text(_('now-listen'));
 		startPlay();
@@ -636,8 +657,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		setConfig();
 	}
 	changeDIV('news');
-	$('#radio-control').hide();
-	getNews();
 	$("#news").delegate('a', 'click', function() {
 		id = $(this).attr('id');
 		type = $(this).attr('data-type');
@@ -673,8 +692,10 @@ document.addEventListener('DOMContentLoaded', function(){
 			currentTrack = parseInt($(this).attr('id'));
 			startPlay();
 			$('#section-title').text(_('now-listen'));
-			$('#controls').show();
-			$('#radio-control').hide();
+			//$('#controls').show();
+			//$('#radio-control').hide();
+			qs('#controls').style.display = 'block';
+			qs('#radio-control').style.display = 'none';
 			changeDIV('now-listen');
 		}
 	});
@@ -701,8 +722,10 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 		currentTrack = parseInt($(this).attr('track-id'));
 		$('#section-title').text(_('now-listen'));
-		$('#controls').show();
-		$('#radio-control').hide();
+		//$('#controls').show();
+		//$('#radio-control').hide();
+		qs('#controls').style.display = 'block';
+		qs('#radio-control').style.display = 'none';
 		changeDIV('now-listen');
 		startPlay();
 	});

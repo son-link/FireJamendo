@@ -61,3 +61,7 @@
 * Adding Album information and share on social networks.
 * Adding loading icon.
 * As always, updated locations and fix some bugs.
+
+##r11 (0.5.1):
+* Replacing Jquery for another compile myself without unnecessary funsctions.
+* Solved minors fix
