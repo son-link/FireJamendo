@@ -27,7 +27,7 @@
 		},
 		"desktop-notification":{
 			"description": "Needed for show the notifications"
-		},
+		}
 	},
 	"installs_allowed_from": [
 		"*"
