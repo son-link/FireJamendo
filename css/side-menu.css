@@ -1,7 +1,3 @@
-body {
-    color: #777;
-}
-
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
@@ -27,18 +23,14 @@ This is the parent `<div>` that contains the menu and the content area.
     position: relative;
     padding-left: 0;
 }
-    #layout.active {
-        position: relative;
+    #layout.active #menu {
+        left: 200px;
+        width: 200px;
+    }
+
+    #layout.active .menu-link {
         left: 200px;
     }
-        #layout.active #menu {
-            left: 200px;
-            width: 200px;
-        }
-
-        #layout.active .menu-link {
-            left: 200px;
-        }
 /*
 The content `<div>` is where all your content goes.
 */
@@ -236,3 +228,17 @@ Hides the menu at `48em`, but modify this based on your app's needs.
         left: 200px;
     }
 }
+
+@media (max-width: 48em) {
+    /* Only apply this when the window is small. Otherwise, the following
+    case results in extra padding on the left:
+        * Make the window small.
+        * Tap the menu to trigger the active state.
+        * Make the window large again.
+    */
+    #layout.active {
+        position: relative;
+        left: 200px;
+    }
+}
+

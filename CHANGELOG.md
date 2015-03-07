@@ -65,3 +65,8 @@
 ##r11 (0.5.1):
 * Replacing Jquery for another compile myself without unnecessary funsctions.
 * Solved minors fix
+
+##r12 (0.5.2):
+* Added script for cache petitions to Jamendo API.
+* Updated Pyre CSS to 0.6.0 and update menu.
+* Other minor changes

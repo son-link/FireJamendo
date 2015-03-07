@@ -164,3 +164,4 @@ input, .styled-select select {
 [class^="icon-"]::before, [class*=" icon-"]::before {margin: 0 !important}
 .icon-2x {font-size: 200%}
 #radio-control {display: none}
+#fav {display: none}

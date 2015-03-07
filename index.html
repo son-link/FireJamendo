@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <head>
+	<head>
 		<meta charset="utf-8">
-        <title>FireJamendo</title>
+		<title>FireJamendo</title>
 		<meta name='theme-color' content='#6F3E70'>
-        <meta name="description" content="Jamendo player">
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
-        <link rel="shortcut icon" href="img/icons/icon16x16.png">
-        <link rel="prefetch" type="application/l10n" href="data/locales.ini" />
-        <script type="text/javascript" src="js/jquery.min.js" defer></script>
-		<link href="fonts.css" rel="stylesheet" type="text/css">
+		<meta name="description" content="Jamendo player for Firefox OS and Firefox web browser">
+		<meta name="viewport" content="width=device-width, user-scalable=no" />
+		<link rel="shortcut icon" href="img/icons/icon16x16.png">
+		<link rel="prefetch" type="application/l10n" href="data/locales.ini" />
+		<script type="text/javascript" src="js/jquery.min.js" defer></script>
+		<script type="text/javascript" src="js/jquery-ajax-localstorage-cache.js" defer></script>
 		<link href="css/pure-min.css" rel="stylesheet" type="text/css">
 		<link href="css/side-menu.css" rel="stylesheet" type="text/css">
 		<link href="css/fontello-embedded.css" rel="stylesheet" type="text/css">
@@ -21,21 +21,21 @@
 	<div id="layout">
 		<a href="#menu" id="menuLink" class="menu-link">
         <!-- Hamburger icon -->
-        <span></span>
-    </a>
+			<span></span>
+		</a>
 		<div id="menu">
 			<div class="pure-menu pure-menu-open">
 				<a href="#" class="pure-menu-heading">FireJamendo</a>
-				<ul>
-					<li><a href="#" id="btn-news"><i class="icon-newspaper"></i><span data-l10n-id="news"></span></a></li>
-					<li><a href="#" id="btn-now-listen"><i class="icon-headphones"></i><span data-l10n-id="now-listen"></span></a></li>
-					<li><a href="#" id="btn-radios"><i class="icon-radio"></i><span data-l10n-id="radios"></span></a></li>
-					<li><a href="#" id="btn-top"><i class="icon-award"></i><span data-l10n-id="top"></span></a></li>
-					<li><a href="#" id="btn-search"><i class="icon-search"></i><span data-l10n-id="search"></span></a></li>
-					<li><a href="#" id="btn-artist-info"><i class="icon-info"></i><span data-l10n-id="artist-info"></span></a></li>
-					<li><a href="#" id="btn-album-info"><i class="icon-album"></i><span data-l10n-id="album-info"></span></a></li>
-					<li><a href="#" id="btn-profile"><i class="icon-user"></i><span data-l10n-id="profile"></span></a></li>
-					<li><a href="#" id="btn-config"><i class="icon-config"></i><span data-l10n-id="config"></span></a></li>
+				<ul class="pure-menu-list">
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-news"><i class="icon-newspaper"></i><span data-l10n-id="news"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-now-listen"><i class="icon-headphones"></i><span data-l10n-id="now-listen"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-radios"><i class="icon-radio"></i><span data-l10n-id="radios"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-top"><i class="icon-award"></i><span data-l10n-id="top"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-search"><i class="icon-search"></i><span data-l10n-id="search"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-artist-info"><i class="icon-info"></i><span data-l10n-id="artist-info"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-album-info"><i class="icon-album"></i><span data-l10n-id="album-info"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-profile"><i class="icon-user-1"></i><span data-l10n-id="profile"></span></a></li>
+					<li class="pure-menu-item"><a class="pure-menu-link" href="#" id="btn-config"><i class="icon-config"></i><span data-l10n-id="config"></span></a></li>
 				</ul>
 			</div>
 		</div>
@@ -94,10 +94,10 @@
 						</div>
 						<div id="toolbar">
 							<ul>
-								<li><a href="#" id="stop"><i class="icon-stop icon-2x"></i></a></li>
-								<li><a href="#" id="back"><i class="icon-fast-bw icon-2x"></i></a></li>
-								<li><a href="#" id="play"><i class="icon-play icon-2x"></i></a></li>
-								<li><a href="#" id="next"><i class="icon-fast-fw icon-2x"></i></a></li>
+								<li><a href="#" id="stop"><i class="icon-stop-1 icon-2x"></i></a></li>
+								<li><a href="#" id="back"><i class="icon-fast-bw-1 icon-2x"></i></a></li>
+								<li><a href="#" id="play"><i class="icon-play-1 icon-2x"></i></a></li>
+								<li><a href="#" id="next"><i class="icon-fast-fw-1 icon-2x"></i></a></li>
 								<li><a href="#" class="download" download><i class="icon-download icon-2x"></i></a></li>
 							</ul>
 						</div>
@@ -105,7 +105,7 @@
 					<div id="radio-control">
 						<ul>
 							<li><a href="#" id="play-radio"><i class="icon-play icon-2x"></i></a></li>
-							<li><a href="#" class="download" download><i class="icon-download icon-2x"></i></a></li>
+							<li><a href="#" class="download" target="_black" download><i class="icon-download icon-2x"></i></a></li>
 						</ul>
 					</div>
 					<div class="share_buttons" data-type="now-listen">
@@ -268,5 +268,6 @@
 	<link href="css/firejamendo.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" defer src="js/ui.js"></script>
 	<audio src="" id="player" preload="none"></audio>
+	<iframe width="1" height="1" frameborder="0" src="" id="down"></iframe>
 </body>
 </html>

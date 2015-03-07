@@ -27,11 +27,22 @@
 		},
 		"desktop-notification":{
 			"description": "Needed for show the notifications"
+		},
+		"device-storage:music": {
+			"description": "Required for music download",
+			"access": "createonly"
 		}
 	},
 	"installs_allowed_from": [
 		"*"
 	],
+	"messages": [{
+		"push": "/index.html"
+	  }, {
+		"push-register": "/index.html"
+	  }, {
+		"notification": "/index.html"
+	  }],
 	"locales": {
 		"eo": {
 			"name": "FireJamendo",
