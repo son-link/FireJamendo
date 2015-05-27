@@ -6,9 +6,11 @@ Play thousands of free music tracks from [Jamendo](http://jamendo.com/) on your 
 
 This project is currently under development. You can fork it to [fix bugs](https://github.com/son-link/FireJamendo/issues) or add new features.
 
-If you are interested to translate to other locations or update any available, read [this](https://github.com/son-link/FireJamendo/wiki/How-to-translate)
+If you are interested to translate to other locations or update any available, read [this.](https://github.com/son-link/FireJamendo/wiki/How-to-translate) [En español](https://github.com/son-link/FireJamendo/wiki/How-to-translate)
 
-For more information, read the [changelog](https://github.com/son-link/FireJamendo/blob/master/CHANGELOG.md).
+![Translate status](http://weblate-firejamendo.rhcloud.com/widgets/firejamendo/-/svg-badge.svg)
+
+For more information about new versions, read the [changelog](https://github.com/son-link/FireJamendo/blob/master/CHANGELOG.md).
 
 ## Licence
 
@@ -20,7 +22,7 @@ You can read a copy of the licence in the [LICENCE](https://github.com/son-link/
 
 - [FireJamendo](http://son-link.github.io/FireJamendo)
 - [Repository](http://github.com/son-link/FireJamendo)
-- [App on Firefox Marketplace (stable version)](https://marketplace.firefox.com/app/firejamendo)
+- [App on Firefox Marketplace](https://marketplace.firefox.com/app/firejamendo)
 
 ## Captures
 
@@ -53,6 +55,7 @@ You can read a copy of the licence in the [LICENCE](https://github.com/son-link/
 * **Michael Moroni** for Italian and Esperanto location, also correct English location too.
 * **Maximilian Weißl** for German location
 * **Fabián PS** for app icon and fixed css colors
-* and all that you're down and using this project
+* **Rubén Santos** for Galician location
+* And all that you're download and using this project
 
 Happy listening ;)
