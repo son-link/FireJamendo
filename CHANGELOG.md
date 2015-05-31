@@ -70,3 +70,16 @@
 * Added script for cache petitions to Jamendo API.
 * Updated Pyre CSS to 0.6.0 and update menu.
 * Other minor changes
+
+##r13 (0.5.9):
+* Replaced Jquery for Zepto.js. Minimalist and compatible with Jquery.
+* Now you can read user's commets for selected album
+* Added simple template system writed by [John Resig](http://ejohn.org/) - MIT Licensed
+* Remove export playlists
+* New config system. If you use previous version the new system import the old config and delete this.
+* New loading animation. Generated on [http://preloaders.net/](http://preloaders.net/)
+* Added last l10n.js from Mozilla-b2g Gaia and update translations
+* Added Galician and update English and Spanish locacations
+* Added icons for login/logout, save and delete buttons on configuration section
+* Fix some bugs
+* Clean code and remove unnecesary files

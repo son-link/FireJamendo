@@ -1,5 +1,5 @@
 {
-	"version": "0.5.2",
+	"version": "0.5.9",
 	"name": "FireJamendo",
 	"description": "Jamendo player for Firefox OS and Firefox web browser",
 	"launch_path": "/index.html",
@@ -12,9 +12,8 @@
 	},
 	"developer": {
 		"name": "Alfonso Saavedra 'Son Link'",
-		"url": "http://github.com/son-link/FireJamendo"
+		"url": "http://github.com/son-link"
 	},
-	"type": "privileged",
 	"permissions": {
 		"systemXHR": {
 			"description":"Needed to access to Jamendo APIs"
@@ -27,6 +26,9 @@
 		},
 		"desktop-notification":{
 			"description": "Needed for show the notifications"
+		},
+		"device-storage:music":{
+			"access": "readwrite"
 		}
 	},
 	"installs_allowed_from": [
@@ -69,7 +71,7 @@
 					"description": "Necesario para que FireJamendo se siga ejecutando en segundo plano"
 				},
 					"audio-channel-content": {
-					"description": "Necesario para que FireJamendo se siga reproduciendo música en segundo plano"
+					"description": "Necesario para que FireJamendo siga reproduciendo la música en segundo plano"
 				},
 				"desktop-notification": {
 					"description": "Necesario para mostrar las notificaciones"
@@ -93,7 +95,9 @@
 					"description": "Necessario per mostrare le notifiche"
 				}
 			}
-		}
+		},
+		"gl":{},
+		"de":{}
 	},
 	"default_locale": "en",
 	"redirects": [{

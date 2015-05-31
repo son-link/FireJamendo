@@ -16,21 +16,54 @@ var access_token;
 var radio_interval;
 var artist_id = 0;
 var album_id = 0;
-var qs = function(selector) {return document.querySelector(selector)}
+var qs = function(selector) {return document.querySelector(selector)};
+var feed = {};
+var jamendoLangs = ['en', 'es', 'it', 'de', 'fr', 'pl'];
+var config;
 // For localizing strings in JavaScript
 var _ = navigator.mozL10n.get;
 navigator.mozL10n.once(start);
 function start() {
+	config = JSON.stringify({
+		top_orderby : "popularity_total",
+		profile_limit : 10,
+		top_limit : 10,
+		down_format : "ogg1",
+		share_track : _('share-track'),
+		share_artist : _('share-artist'),
+		share_album : _('share-album'),
+		notification_msg : _('notification-msg'),
+		show_notifications : true,
+		album_reviews_lang : 'any',
+		album_reviews_order : 'addeddate',
+		reviews_order_descent : false,
+		hasscore : false,
+		album_reviews_limit : 10,
+	});
 	lang = navigator.mozL10n.language.code;
-	if (lang.search(/es-*/) != -1){
-		// Need for translate to all Spanish variants (es-ES, es-AR, es-MX, etc) on Firefox web browser
-		navigator.mozL10n.language.code = 'es';
-	}
-	if (! window.localStorage.profile_limit){
-		setConfig();
-	}
+
+	checkConfig();
 	getNews();
 }
+
+var localCache = {
+	data: {},
+    remove: function (url) {
+        delete localCache.data[url];
+    },
+    exist: function (url) {
+        return localCache.data.hasOwnProperty(url) && localCache.data[url] !== null;
+    },
+    get: function (url) {
+        console.log('Getting in cache for url ' + url);
+        return localCache.data[url];
+    },
+    set: function (url, cachedData, callback) {
+        localCache.remove(url);
+        localCache.data[url] = cachedData;
+        if ($.isFunction(callback)) callback(cachedData);
+    }
+};
 
 // Common functions
 function convertTime(secs){
@@ -56,42 +89,52 @@ if (!String.prototype.format) {
 	};
 }
 
+function getConf(key){
+	return JSON.parse(localStorage.config)[key];
+}
+
 function getData(params, cb){
 	// Get data from Jamendo API
-	//$('#loading').show();
 	qs('#loading').style.display = 'block';
 	if (params.search(/\?/) == -1){
 		params += '?client_id='+client_id;
 	}else{
 		params += '&client_id='+client_id;
 	}
+	var url = baseurl+params
 	$.ajax({
-		url: baseurl+params,
+		url: url,
 		type: 'GET',
 		dataType: 'json',
-		localCache   : true,
-        cacheTTL     : 1,
-        isCacheValid : function(){
-            return true;
-        },
+		cache: true,
 		error: function(xhr, status, error) {
 			qs('#loading').style.display = 'none';
-			onError(_('data_error'));
+			if (status != 'abort'){
+				onError(_('data_error'));
+			}
 		},
-		success: function(jsonp) {
-			//$('#loading').hide();
+		success: function(json) {
 			qs('#loading').style.display = 'none';
 			if (cb){
-				cb(jsonp);
+				localCache.set(url, json, cb);
 			}
+		},
+
+		beforeSend: function () {
+			if (localCache.exist(url)) {
+				qs('#loading').style.display = 'none';
+				cb(localCache.get(url));
+				return false;
+			}
+			return true;
 		}
 	});
 }
 
 function changeDIV(div){
 	// hidde all the divs except the especific
-	divs = ['radios', 'news', 'artist-info', 'now-listen', 'jamendo-top', 'search', 'profile', 'config', 'album-info'];
-	for (i=0; i < divs.length; i++){
+	divs = ['radios', 'news', 'artist-info', 'now-listen', 'jamendo-top', 'search', 'profile', 'config', 'album-info', 'download_list'];
+	for (i=0; i < divs.length-1; i++){
 		if (div == divs[i]){
 			qs('#'+div).style.display = 'block';
 		}else{
@@ -116,7 +159,7 @@ function changeTab(tab, tabs){
 }
 
 function onError(msg){
-	console.log(msg)
+	console.error(msg)
 	qs('#error').style.display = 'block';
    setTimeout(function () {
 		qs('#error').style.display = 'none';
@@ -124,26 +167,30 @@ function onError(msg){
 	$('#error').text(msg);
 }
 
-function setConfig(reset){
-	// Set init conf
-	window.localStorage.top_orderby = "popularity_total";
-	window.localStorage.profile_limit = 10;
-	window.localStorage.top_limit = 10;
-	window.localStorage.down_format = "ogg1";
-	window.localStorage.share_track = _('share-track');
-	window.localStorage.share_artist = _('share-artist');
-	window.localStorage.share_album = _('share-album');
-	window.localStorage.notification_msg = _('notification-msg');
-	window.localStorage.show_notifications = true;
-	if (reset){
-		$("#config-form").find(':input').each(function() {
-			this.value = window.localStorage[this.id];
-			if (this.id == 'show_notifications'){
-				this.checked = window.localStorage[this.id];
+function checkConfig(){
+	if (localStorage.config){
+		// For update actual system config
+		conf = localStorage.config;
+		$.each(config, function(key, value){
+			if (! conf[key]){
+				conf[key] = config[key];
 			}
 		});
+		localStorage.setItem('config', conf);
+	}else if (localStorage.top_orderby){
+		// If the user has used FireJamendo =< 0.5.2 save the config to new system
+		$.each(config, function(key, value){
+			if (localStorage[key]){
+				config[key] = localStorage[key];
+				localStorage[key] = '';
+			}
+		});
+		localStorage.setItem('config', config);
+	}else{
+		localStorage.setItem('config', config);
 	}
 }
+
 function notifyMe(body) {
 	if (!('Notification' in window)) {
 		alert('This browser does not support desktop notification');
@@ -167,6 +214,7 @@ function notifyMe(body) {
 		});
 	}
 }
+
 function startPlay(){
 	// Start play song
 	if (player){
@@ -183,14 +231,14 @@ function startPlay(){
 	$('#artist').text(playlist[currentTrack].artist_name);
 	notifyMsg = playlist[currentTrack].artist_name+' - '+playlist[currentTrack].track_name;
 	document.title = 'FireJamendo: '+notifyMsg;
-	if (window.localStorage.show_notifications){
+	if (getConf('show_notifications')){
 		notifyMe(notifyMsg);
 	}
 	$('#album-art').attr('src', playlist[currentTrack].image);
 	if (playlist[currentTrack].album_name){
 		$('#album').text(playlist[currentTrack].album_name);
 	}
-	$('.download').attr('href', 'https://storage-new.newjamendo.com/download/track/{0}/{1}/'.format(playlist[currentTrack].track_id, window.localStorage.down_format));
+	$('.download').attr('href', 'http://storage-new.newjamendo.com/download/track/{0}/{1}/'.format(playlist[currentTrack].track_id, getConf('down_format')));
 	$('#play i').removeClass('icon-play')
 	$('#play i').addClass('icon-pause');
 	var seekbar = document.getElementById('seekbar');
@@ -232,8 +280,9 @@ function startPlay(){
 
 function getAlbum(id){
 	// get album
-	changeDIV('album-info')
+	changeDIV('album-info');
 	$('#section-title').text(_('album-info'));
+	changeTab('album-tracks', ['album-tracks', 'album-reviews']);
 	getData('albums/tracks?audioformat=ogg&id='+id, function(responseText) {
 		data = responseText.results[0];
 		album_tracks = {};
@@ -248,7 +297,7 @@ function getAlbum(id){
 		$('#album_cover').attr('src', cover);
 		$('#album_name').text(data.name);
 		$('#album_artist').text(data.artist_name);
-		$('#down_album').attr('href', 'https://storage-new.newjamendo.com/download/a{0}/{1}/'.format(id, window.localStorage.down_format));
+		$('#down_album').attr('href', 'https://storage-new.newjamendo.com/download/a{0}/{1}/'.format(id, getConf('down_format')));
 		for (i=0; i<data.tracks.length; i++){
 			track_name = data.tracks[i].name;
 			audio = data.tracks[i].audio;
@@ -256,39 +305,46 @@ function getAlbum(id){
 			$('#album-tracks ul').append('<li><p><a href="#" data-album-track="{0}">{1}</a></p></li>'.format(i, track_name));
 		}
 	});
-}
-function getPlaylist(id, inport){
-	// get playlist
-	if (! inport){
-		getData('playlists/tracks?audioformat=ogg&id='+id, function(responseText) {
-			playlist = {};
-			currentTrack = 0;
-			data = responseText.results[0];
-			for (i=0; i<data.tracks.length; i++){
-				track_name = data.tracks[i].name;
-				audio = data.tracks[i].audio;
-				playlist[i] = {"artist_name": data.tracks[i].artist_name, "track_name": track_name, "image": data.tracks[i].album_image, "audio": audio, 'track_id': data.tracks[i].id, "album_name": data.tracks[i].name};
-			}
-			qs('#controls').style.display = 'block';
-			qs('#radio-control').style.display = 'none';
-			startPlay();
-		});
-	}else{
-		// Import the playlist to PLS format. Compatible with many players.
-		getData('playlists/tracks?audioformat='+window.localStorage.down_format+'&id='+id, function(responseText) {
-			data = responseText.results[0];
-			text = '[playlist]\nNumberOfEntries='+data.tracks.length+'\n';
-			for (i=0; i<data.tracks.length; i++){
-				track_name = data.tracks[i].name;
-				audio = data.tracks[i].audio.replace(/&from=app-(.+)/, '').replace(/\?/, '/?').replace('https', 'http');
-				text += '#Title{0}={1} - {2}\nFile{0}={3}\n'.format(i+1, data.tracks[i].artist_name, track_name, audio);
-			}
-			pls = new Blob([text], {type: 'audio/x-scpls'});
-			textFile = window.URL.createObjectURL(pls);
-			window.open(textFile);
-		});
+	var params = 'album_id={0}&limit{1}'.format(id, getConf('album_reviews_limit'));
+	orderby = getConf('album_reviews_order');
+	if (getConf('reviews_order_descent')){
+		orderby += '_desc'
 	}
-
+	params += '&order='+orderby;
+	if (getConf('album_reviews_lang') != 'any'){
+		params += '&lang='+getConf('album_reviews_lang');
+	}
+	if (getConf('hasscore')){
+		params += '&hasscore=true';
+	}
+	getData('reviews/albums?'+params, function(responseText){
+		data = responseText.results;
+		$.each(data, function(key, value){
+			if (value.score >= 1){
+				value.score = parseInt(value.score)*10;
+			}else{
+				value.score = 0;
+			}
+			$('#album-reviews ul').append(tmpl('reviews', value));
+		});
+	});
+}
+function getPlaylist(id){
+	// get playlist
+	getData('playlists/tracks?audioformat=ogg&id='+id, function(responseText) {
+		playlist = {};
+		currentTrack = 0;
+		data = responseText.results[0];
+		for (i=0; i<data.tracks.length; i++){
+			track_name = data.tracks[i].name;
+			audio = data.tracks[i].audio;
+			playlist[i] = {"artist_name": data.tracks[i].artist_name, "track_name": track_name, "image": data.tracks[i].album_image, "audio": audio, 'track_id': data.tracks[i].id, "album_name": data.tracks[i].name};
+		}
+		changeDIV('now-listen');
+		qs('#controls').style.display = 'block';
+		qs('#radio-control').style.display = 'none';
+		startPlay();
+	});
 }
 function getArtistTracks(id, cb){
 	// get all artist tracks
@@ -357,11 +413,12 @@ function getTrack(id){
 	});
 }
 function getTop(top){
-	params = top+'/?order={0}&limit={1}&imagesize=100'.format(window.localStorage.top_orderby, parseInt(window.localStorage.top_limit));
+	params = top+'/?order={0}&limit={1}&imagesize=100'.format(getConf('top_orderby'), parseInt(getConf('top_limit')));
 	getData(params, function(responseText) {
 		data = responseText.results;
 		$('#top-list').empty();
 		for (i=0; i < data.length; i++){
+			info = {};
 			cover = '';
 			if (data[i].album_image){
 				cover = data[i].album_image;
@@ -371,13 +428,14 @@ function getTop(top){
 				cover = 'img/no-image.png';
 			}
 			if (top == 'albums'){
-				$('#top-list').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" id="{0}" data-type="album"><img src="{1}" class="pure-img"><p><b>{2}</b><br />{3}</p></a></div>'.format(data[i].id, cover, data[i].name, data[i].artist_name));
+				info = {id: data[i].id, cover: cover, name: data[i].name, artist: data[i].artist_name, type: 'album'}
 			}else if (top == 'artists'){
-				$('#top-list').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" id="{0}" data-type="artist"><img src="{1}" class="pure-img"><p><b>{2}</b></p></a></div>'.format(data[i].id, cover, data[i].name));
+				info = {id: data[i].id, cover: cover, name: null, artist: data[i].name, type: 'artist'}
 			}else{
 				top_tracks[i] = {"artist_name": data[i].artist_name, "track_name": data[i].name, "image": cover, "audio": data[i].audio, "album_name": data[i].album_name, 'download': data[i].audiodownload, 'track_id': data[i].id};
-				$('#top-list').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" id="{0}" data-type="track"><img src="{1}" class="pure-img"><p><b>{2}</b><br />{3}</p></a></div>'.format(i, cover, data[i].name, data[i].artist_name));
+				info = {id: i, cover: cover, name: data[i].name, artist: data[i].artist_name, type: 'track'}
 			}
+			$('#top-list').append(tmpl('top_list_template',info));
 		}
 		$('#top-tabs .tab a').each(function(index){
 			if ($(this).attr('id') == 'top-'+top){
@@ -398,50 +456,55 @@ function nextTrack(){
 }
 
 function getNews(){
-	getData('feeds/', function(responseText) {
-    // News
-		if (navigator.mozL10n.language.code == 'es'){
-			lang = 'es';
-		}else if (navigator.mozL10n.language.code == 'it'){
-			lang = 'it';
-		}else if (navigator.mozL10n.language.code == 'ge'){
-			lang = 'ge';
-		}else{
-			lang = 'en';
-		}
+	// News
+	if (Object.keys(feed).length > 0){
 		$('#news').empty();
-		data = responseText.results;
-		for (i=0; i<data.length; i++){
-			text = '';
-			if (data[i].text[lang]){
-				text = data[i].text[lang];
+		$.each(feed, function(key, value){
+			$('#news').append(tmpl('feed', value));
+		});
+	}else{
+		getData('feeds/', function(responseText) {
+			if (navigator.mozL10n.language.code == 'es'){
+				lang = 'es';
+			}else if (navigator.mozL10n.language.code == 'it'){
+				lang = 'it';
+			}else if (navigator.mozL10n.language.code == 'ge'){
+				lang = 'ge';
 			}else{
-				text = data[i].text.en;
+				lang = 'en';
 			}
+			data = responseText.results;
 
-			if (data[i].type == "album"){
-				html = '<div class="pure-g">\
-					<div class="pure-u"><a id="{0}" data-type="album" href="#"><img src="{1}"></a></div>\
-					<div class="pure-u-1 pure-u-lg-2-3">\
-					<h5>{2}</h5>\
-					<h5>{3}</h5>\
-					{4}</div></div>'.format(data[i].joinid, data[i].images.size315_111, data[i].title[lang], data[i].subtitle[lang], text);
-			}else{
-				type = _(data[i].type);
-				html = '<div class="pure-g">\
-					<div class="pure-u"><a id="{0}" data-type={1} href="#"><img src="{2}"></a></div>\
-					<div class="pure-u-1 pure-u-lg-2-3">\
-					<h5>{3}</h5>\
-					<h5>{4}</h5>\
-					{5}</div></div>'.format(data[i].joinid, data[i].type, data[i].images.size315_111, data[i].title[lang], type, text);
+			for (i=0; i<data.length; i++){
+				text = '';
+				if (data[i].text[lang]){
+					data[i].text = data[i].text[lang];
+				}else{
+					data[i].text = data[i].text.en;
+				}
+				if (data[i].title[lang]){
+					data[i].title = data[i].title[lang];
+				}else{
+					data[i].title = data[i].title.en;
+				}
+				if (data[i].subtitle.en && data[i].subtitle[lang]){
+					data[i].subtitle = data[i].subtitle[lang];
+				}else{
+					data[i].subtitle = _(data[i].type);
+				}
+				if (data[i].type != "news"){
+					data[i].link = "#";
+				}
+				feed[i] = data[i];
+				$('#news').append(tmpl('feed', data[i]));
 			}
-			$('#news').append(html);
-		}
-	});
+		});
+	}
 }
 
 function getArtistData(id){
 	artist_id = id;
+	changeDIV('artist-info')
 	changeTab('artist-albums', ['artist-tracks', 'artist-albums']);
 
 	getData('artists/albums?limit=all&id='+id, function(responseText) {
@@ -457,13 +520,14 @@ function getArtistData(id){
 				cover = 'img/no-image.png';
 			}
 			artist_albums[i] = {"album_name": data.albums[i].name, "image": cover, "id": data.albums[i].id};
-			$('#artist-albums').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" album-id="{0}"><img src="{1}" class="pure-img"><p><b>{2}</b></p></a></div>'.format(data.albums[i].id, cover, data.albums[i].name));
+			info = {id: data.albums[i].id, cover: cover, name: null, artist: data.albums[i].name, type: null};
+			$('#artist-albums').append(tmpl('top_list_template', info));
 		}
 		$('#artist_cover').attr('src', responseText.results[0].image);
 	});
 	getArtistTracks(id, function(data){
 		i = 0;
-		$('#artist-tracks').empty();
+		$('#artist-tracks ul').empty();
 		$.each(data, function(key, value){
 			cover = ''
 			if (value.image){
@@ -472,7 +536,8 @@ function getArtistData(id){
 				cover = 'img/no-image.png';
 			}
 			artist_tracks[i] = {"artist_name": value.artist_name, "track_name": value.track_name, "image": cover, "audio": value.audio, "album_name": value.album_name, 'track_id': value.track_id}
-			$('#artist-tracks').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" track-id="{0}" data-type="artist-track"><img src="{1}" class="pure-img"><p><b>{2}</b></p></a></div>'.format(i, cover, value.track_name));
+			info = {id: i, name: value.track_name};
+			$('#artist-tracks ul').append(tmpl('playlist', info));
 			i++;
 		});
 	});
@@ -498,7 +563,8 @@ $("#search-btn").click(function(e) {
 				}else{
 					image = value.album_image;
 				}
-				$('#search-results').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" data-id={0} data-type={1}><img src="{2}" class="pure-img"><p><b>{3}</b></p></a></div>'.format(value.id, searchby, image, value.name));
+				info = {id: value.id, cover: image, name: null, artist: value.name, type: searchby}
+				$('#search-results').append(tmpl('top_list_template', info));
 			});
 		});
 	}
@@ -507,9 +573,9 @@ $("#search-btn").click(function(e) {
 function getToken(url, type){
 	// Get, or refresh, the Oauth token for access user data.
 	if (type == 'new'){
-		params = {'client_id': client_id, 'client_secret': client_secret, 'code': window.localStorage.code, 'grant_type': 'authorization_code', 'redirect_uri': url};
+		params = {'client_id': client_id, 'client_secret': client_secret, 'code': localStorage.code, 'grant_type': 'authorization_code', 'redirect_uri': url};
 	}else if (type == 'refresh'){
-		params = {'client_id': client_id, 'client_secret': client_secret, 'grant_type': 'refresh_token', 'refresh_token': window.localStorage.refresh_token};
+		params = {'client_id': client_id, 'client_secret': client_secret, 'grant_type': 'refresh_token', 'refresh_token': localStorage.refresh_token};
 	}
 	$.ajax({
 		url: 'https://api.jamendo.com/v3.0/oauth/grant',
@@ -521,8 +587,8 @@ function getToken(url, type){
 		},
 		success: function(jsonp) {
 			$('#btn-login').text(_('logout'));
-			window.localStorage.access_token = jsonp.access_token;
-			window.localStorage.refresh_token = jsonp.refresh_token;
+			localStorage.access_token = jsonp.access_token;
+			localStorage.refresh_token = jsonp.refresh_token;
 			if (type == 'refresh'){
 				getUserData();
 			}
@@ -538,11 +604,11 @@ function JamendoLogin(){
 		url = window.location.href.replace(/[^\/]*$/, '')+'redirect.html';
 	}
 	OauthUrl = 'https://api.jamendo.com/v3.0/oauth/authorize?client_id='+client_id+'&redirect_uri='+url
-	if ( ! window.localStorage.access_token){
+	if ( ! localStorage.access_token){
 		var authWindow = window.open(OauthUrl);
 		window.addEventListener('message', function(evt) {
 			authWindow.close();
-			window.localStorage.code = evt.data.code;
+			localStorage.code = evt.data.code;
 			getToken(url, 'new');
 		});
 	}else{
@@ -552,17 +618,16 @@ function JamendoLogin(){
 
 function JamendoLogout(){
 	// Logout from your Jamendo acoount.
-	window.localStorage.username = '';
-	window.localStorage.user_image = '';
-	window.localStorage.code = ''
-	window.localStorage.access_token = '';
-	window.localStorage.refresh_token = '';
+	localStorage.username = '';
+	localStorage.user_image = '';
+	localStorage.code = ''
+	localStorage.access_token = '';
+	localStorage.refresh_token = '';
 	$('#btn-login').text(_('login'));
 }
 
 function getUserData(){
 	changeDIV('profile');
-	qs('#fav').style.display = 'block';
 	if( $('#user-albums').is(':empty') ) {
 		changeTab('user-albums', ['user-tracks', 'user-albums', 'user-artists', 'user-playlists']);
 	}
@@ -570,16 +635,14 @@ function getUserData(){
 	$('#user-albums').empty();
 	$('#user-tracks').empty();
 	$('#user-artists').empty();
-	getData('users/albums?access_token={0}&limit={1}'.format(window.localStorage.access_token, window.localStorage.profile_limit), function(responseText){
+	getData('users/albums?access_token={0}&limit={1}'.format(localStorage.access_token, getConf('profile_limit')), function(responseText){
 		if (responseText.headers.error_message == 'Jamendo Api Access Token Error: The access token provided has expired'){
 			JamendoLogin();
 			return false;
 		}
 		data = responseText.results[0];
-		window.localStorage.username = data.dispname;
-		window.localStorage.user_image = data.image;
-		$('#user_img').attr('src', window.localStorage.user_image);
-		$('#username').text(window.localStorage.username);
+		$('#user_img').attr('src', data.image);
+		$('#username').text(data.dispname);
 		for (i=0; i<data.albums.length; i++){
 			cover = ''
 			if (data.albums[i].image){
@@ -587,10 +650,11 @@ function getUserData(){
 			}else{
 				cover = 'img/no-image.png';
 			}
-			$('#user-albums').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" album-id="{0}"><img src="{1}" class="pure-img"><p><b>{2}</b><br/>{3}</p></a></div>'.format(data.albums[i].id, cover, data.albums[i].name, data.albums[i].artist_name));
+			info = {id: data.albums[i].id, cover: cover, name: data.albums[i].name, artist: data.albums[i].artist_name, type: null};
+			$('#user-albums').append(tmpl('top_list_template', info));
 		}
 	});
-	getData('users/artists?access_token='+window.localStorage.access_token, function(responseText){
+	getData('users/artists?access_token='+localStorage.access_token, function(responseText){
 		data = responseText.results[0];
 		for (i=0; i<data.artists.length; i++){
 			cover = ''
@@ -599,10 +663,11 @@ function getUserData(){
 			}else{
 				cover = 'img/no-image.png';
 			}
-			$('#user-artists').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" id="{0}" data-type="artist"><img src="{1}" class="pure-img"><p><b>{2}</b></p></a></div>'.format(data.artists[i].id, cover, data.artists[i].name));
+			info = {id: data.artists[i].id, cover: cover, name: null, artist: data.artists[i].name, type: null};
+			$('#user-artists').append(tmpl('top_list_template', info));
 		}
 	});
-	getData('users/tracks?access_token='+window.localStorage.access_token, function(responseText){
+	getData('users/tracks?access_token='+localStorage.access_token, function(responseText){
 		data = responseText.results[0];
 		for (i=0; i<data.tracks.length; i++){
 			cover = ''
@@ -612,15 +677,16 @@ function getUserData(){
 				cover = 'img/no-image.png';
 			}
 			user_tracks[i] = {"artist_name": data.tracks[i].artist_name, "track_name": data.tracks[i].name, "image": cover, "audio": data.tracks[i].audio, "album_name":data.tracks[i].album_name, 'track_id': data.tracks[i].id}
-			$('#user-tracks').append('<div class="pure-u-1-2 pure-u-md-1-2 pure-u-lg-1-5"><a href="#" track-id="{0}"><img src="{1}" class="pure-img" data-type="user-track"><p><b>{2}</b><br/>{3}</p></a></div>'.format(i, cover, data.tracks[i].name, data.tracks[i].artist_name));
+			info = {id: data.tracks[i].id, cover: cover, name: data.tracks[i].name, artist: data.tracks[i].artist_name, type: null};
+			$('#user-tracks').append(tmpl('top_list_template', info));
 		}
 	});
-	getData('playlists/?access_token='+window.localStorage.access_token, function(responseText){
+	getData('playlists/?access_token='+localStorage.access_token, function(responseText){
 		data = responseText.results;
 		$('#user-playlists ul').empty();
-		for (i=0; i<data.length; i++){
-			$('#user-playlists ul').append('<li><p><a href="#" playlist-id="{0}" data-type="inport"><i class="fa icon-download"></i></a> <a href="#" playlist-id="{0}">{1}</a></p></li>'.format(data[i].id, data[i].name));
-		}
+		$.each(data, function(key, value){
+			$('#user-playlists ul').append(tmpl('playlist', value));
+		});
 	});
 }
 
@@ -631,13 +697,13 @@ function share(web, type){
 	// Share now playing in social networks (Facebook, Twitter, G+, etc)
 		if (type == 'now-listen' && playlist[currentTrack]){
 			url = 'http://jamen.do/t/'+playlist[currentTrack].track_id;
-			msg = window.localStorage.share_track.format(playlist[currentTrack].track_name, playlist[currentTrack].artist_name);
+			msg = getConf('share_track').format(playlist[currentTrack].track_name, playlist[currentTrack].artist_name);
 		}else if (type == 'artist' && artist_id != 0){
 			url = 'http://jamen.do/a/'+artist_id
-			msg = window.localStorage.share_artist.format($('#artist_name').text());
+			msg = getConf('share_artist').format($('#artist_name').text());
 		}else if (type == 'album' && album_id != 0){
 			url = 'http://jamen.do/l/a'+album_id;
-			msg = window.localStorage.share_album.format($('#album_name').text(), $('#album_artist').text());
+			msg = getConf('share_album').format($('#album_name').text(), $('#album_artist').text());
 		}else{
 			return false;
 		}
@@ -661,14 +727,14 @@ document.addEventListener('DOMContentLoaded', function(){
 	$("#news").delegate('a', 'click', function() {
 		id = $(this).attr('id');
 		type = $(this).attr('data-type');
-		if (player){
-			player.pause();
-			changeDIV('now-listen');
-		}
 		if (type == 'album'){
 			getAlbum(id);
 		}else if (type == 'playlist'){
 			getPlaylist(id);
+		}else if (type == 'artist'){
+			getArtistData(id);
+		}else if(type == 'news'){
+			window.open($(this).attr('href'));
 		}else{
 			getArtistTracks(id, function(data){
 				playlist = data;
@@ -676,9 +742,13 @@ document.addEventListener('DOMContentLoaded', function(){
 			changeDIV('now-listen');
 		}
 	});
+
+	$('body').delegate('a[href="#"]', 'click', function(e){
+		e.preventDefault();
+	});
+
 	$("#radios").delegate('a', 'click', function() {
 		id = $(this).attr('id');
-		console.log('Radio ID: '+id);
 		getRadioStream(id);
 	});
 	$('#top-list').delegate('a', 'click', function(){
@@ -701,7 +771,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 
 	$('#search-results').delegate('a', 'click', function(){
-		id = $(this).attr('data-id');
+		id = $(this).attr('id');
 		type = $(this).attr('data-type');
 		if (type == 'albums'){
 			getAlbum(id);
@@ -729,36 +799,39 @@ document.addEventListener('DOMContentLoaded', function(){
 	});
 	$('#artist-albums, #user-albums').delegate('a', 'click', function(){
 		$('#section-title').text(_('now-listen'));
-		getAlbum(parseInt($(this).attr('album-id')));
+		getAlbum(parseInt($(this).attr('id')));
 	});
 
 	$('#user-playlists ul').delegate('a', 'click', function(){
 		id = $(this).attr('playlist-id');
-		if ($(this).attr('data-type') && $(this).attr('data-type') == 'inport'){
-			getPlaylist(id, true);
-		}else{
-			getPlaylist(id);
-			$('#section-title').text(_('now-listen'));
-			changeDIV('now-listen');
-		}
+		getPlaylist(id);
+		$('#section-title').text(_('now-listen'));
+		changeDIV('now-listen');
 	});
 	$('#album-tracks ul').delegate('a', 'click', function(){
 		currentTrack = parseInt($(this).attr('data-album-track'));
 		playlist = album_tracks;
 		$('#section-title').text(_('now-listen'));
 		changeDIV('now-listen');
+		qs('#controls').style.display = 'block';
+		qs('#radio-control').style.display = 'none';
 		startPlay();
 	});
-	if (window.localStorage.access_token){
-		console.log('El usuario esta logueado');
-		qs('#fav').style.display = 'block';
-	}
 });
 
 $('#menu ul li a').click(function(){
 	$('#menuLink').removeClass('active');
 	$('#menu').removeClass('active');
 	$('#layout').removeClass('active');
+});
+
+$('#main').click(function(){
+	if ($('#menuLink').hasClass('active')){
+		$('#menuLink').removeClass('active');
+		$('#menu').removeClass('active');
+		$('#layout').removeClass('active');
+	}
+
 });
 
 $('#btn-now-listen').click(function () {
@@ -770,7 +843,7 @@ $('#btn-radios').click( function () {
 	changeDIV('radios');
 	$('#section-title').text(_('radios'));
 	if( $('#radios').is(':empty') ) {
-		getData('radios/', function(responseText) {
+		getData('radios', function(responseText) {
 			// radios
 			data = responseText.results;
 			for (i=0; i < data.length; i++){
@@ -849,7 +922,7 @@ $('#top-tabs a').click(function(){
 });
 
 $('#btn-profile').click(function(){
-	if ( ! window.localStorage.access_token){
+	if ( ! localStorage.access_token){
 		onError(_('no-logged'));
 	}else{
 		getUserData();
@@ -857,29 +930,13 @@ $('#btn-profile').click(function(){
 });
 
 $('#btn-login').click(function(){
-	if (window.localStorage.access_token){
+	if (localStorage.access_token){
 		JamendoLogout();
 	}else{
 		JamendoLogin();
 	}
 });
 
-$('#btn-config').click(function(){
-	if (window.localStorage.access_token){
-		$('#btn-login').text(_('logout'));
-	}else{
-		$('#btn-login').text(_('login'));
-	}
-	$('#section-title').text(_('config'));
-	// Set values from config
-	$("#config-form").find(':input').each(function() {
-		this.value = window.localStorage[this.id];
-		if (this.id == 'show_notifications'){
-			this.checked = window.localStorage[this.id];
-		}
-	});
-	changeDIV('config');
-});
 
 $('#btn-album-info').click( function () {
 	$('#section-title').text(_('album-info'));
@@ -896,14 +953,38 @@ $('#user-tabs .tab a').click(function(){
 	changeTab(tab, ['user-tracks', 'user-albums', 'user-artists', 'user-playlists']);
 });
 
+$('#album-tabs .tab a').click(function(){
+	tab = $(this).attr('data-tab');
+	changeTab(tab, ['album-tracks', 'album-reviews']);
+});
+
 $('.share_buttons a').click(function(){
 	type =$(this).closest('div').attr('data-type');
 	share($(this).attr('id'), type);
 });
+// Load and save configuration
+$('#btn-config').click(function(){
+	conf = JSON.parse(localStorage.config);
+	if (localStorage.access_token){
+		$('#btn-login').html('<i class="icon-logout"></i> '+_('logout'));
+	}else{
+		$('#btn-login').html('<i class="icon-login"></i> '+_('login'));
+	}
+	$('#section-title').text(_('config'));
+	// Set values from config
+	$("#config-form").find('input, select').each(function() {
+		this.value = conf[this.id];
+		if (this.id == 'show_notifications' || this.id == 'reviews_order_descent' || this.id == 'hasscore'){
+			this.checked = conf[this.id];
+		}
+	});
+	changeDIV('config');
+});
 
 $('#saveconf').click(function(e){
 	e.preventDefault();
-		$("#config-form").find(':input').each(function() {
+	conf = JSON.parse(localStorage.config);
+	$("#config-form").find('input, select').each(function() {
 		if (this.id != 'saveconf'){
 			if (this.id == 'profile_limit' || this.id == 'top_limit'){
 				if (this.value < 10 || this.value > 100){
@@ -912,15 +993,16 @@ $('#saveconf').click(function(e){
 					onError(_('limit_error'));
 					return false
 				}else{
-					window.localStorage[this.id] = this.value;
+					conf[this.id] = this.value;
 					$(this).removeClass('form_error');
 				}
-			}else if (this.id == 'show_notifications'){
-				window.localStorage[this.id] = this.checked;
+			}else if (this.id == 'show_notifications' || this.id == 'hasscore' || this.id == 'reviews_order_descent'){
+				conf[this.id] = this.checked;
 			}else{
-				window.localStorage[this.id] = this.value;
+				conf[this.id] = this.value;
 			}
 		}
+		localStorage.setItem('config', JSON.stringify(conf));
 	});
 });
 
@@ -928,9 +1010,15 @@ $('#clear-data').click(function(e){
 	e.preventDefault();
 	clear = confirm(_('clear-data-msg'));
 	if (clear){
-		window.localStorage.clear();
-
-		setConfig(true);
+		localStorage.clear();
+		localStorage.setItem('config', config);
+		conf = JSON.parse(config);
+		$("#config-form").find('input, select').each(function() {
+			this.value = conf[this.id];
+			if (this.id == 'show_notifications' || this.id == 'reviews_order_descent' || this.id == 'hasscore'){
+				this.checked = conf[this.id];
+			}
+		});
 	}
 });
 
@@ -950,3 +1038,39 @@ window.addEventListener('unload', function () {
 	}
 });
 
+// Simple JavaScript Templating
+// John Resig - http://ejohn.org/ - MIT Licensed
+(function(){
+	var cache = {};
+
+	this.tmpl = function tmpl(str, data){
+	// Figure out if we're getting a template, or if we need to
+	// load the template - and be sure to cache the result.
+	var fn = !/\W/.test(str) ?
+	cache[str] = cache[str] ||
+	tmpl(document.getElementById(str).innerHTML) :
+
+	// Generate a reusable function that will serve as a template
+	// generator (and which will be cached).
+	new Function("obj",
+		"var p=[],print=function(){p.push.apply(p,arguments);};" +
+
+		// Introduce the data as local variables using with(){}
+		"with(obj){p.push('" +
+
+		// Convert the template into pure JavaScript
+		str
+		.replace(/[\r\t\n]/g, " ")
+		.split("<%").join("\t")
+		.replace(/((^|%>)[^\t]*)'/g, "$1\r")
+		.replace(/\t=(.*?)%>/g, "',$1,'")
+		.split("\t").join("');")
+		.split("%>").join("p.push('")
+		.split("\r").join("\\'")
+		+ "');}return p.join('');"
+	);
+
+	// Provide some basic currying to the user
+	return data ? fn( data ) : fn;
+	};
+})();

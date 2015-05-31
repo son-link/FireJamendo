@@ -1,17 +1,24 @@
-*, .pure-g [class*="pure-u"] {font-family: 'FiraSans'}
+@font-face{
+    font-family: 'Fira Sans';
+    src: url('FiraSans-Regular.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+*, .pure-g [class*="pure-u"] {font-family: 'Fira Sans'}
 #menu ul span {margin-left: 0.5rem}
 body, .header, legend {color: #432144 !important;}
 @media all and ( min-width: 600px ) {
 	#main {margin: 0 1rem}
-	#clear-data {margin-left: 0.5rem}
 	.tab {font-size: 200%}
 }
-#toolbar a, .share_buttons a, hr, #radio-control a {color: rgba(67, 33, 68, 0.8) !important}
+#toolbar a, .share_buttons a, hr, #radio-control a, #down_album {color: rgba(67, 33, 68, 0.8) !important}
 .title {margin: 0 0 0.5rem 0}
 h5 {margin: 0; font-size: 100%}
-#news, #search-results, #artist-grid {font-size: 80%;}
+#search-results, #artist-grid {font-size: 80%;}
+#news {font-size: 85%;}
 #news .pure-u-1 {margin-left: 0.5rem;}
-#toolbar ul, .share_buttons ul, #radio-control ul, #user-playlists ul, .top-info, #album-tracks ul {margin: 0; padding: 0;}
+#toolbar ul, .share_buttons ul, #radio-control ul, #user-playlists ul, .top-info, #album-tracks ul, #artist-tracks ul {margin: 0; padding: 0;}
 #toolbar, #share_button {
 	list-style: none;
 	text-align: center;
@@ -30,7 +37,7 @@ h5 {margin: 0; font-size: 100%}
 	background: transparent;
 }
 #toolbar i, .share_buttons i, #radio-control i{
-	display: inline-block;
+	display: inline;
 	vertical-align: middle;
 	line-height: 1rem;
 	text-align: center;
@@ -69,7 +76,7 @@ a {text-decoration: none}
 	width: 6rem;
 	height: 6rem;
 }
-#top-list, #artist-albums p, #artist-tracks p {font-size: 70%;}
+#top-list p {font-size: 70%; padding: 0;}
 @media all and ( max-width: 600px ) {
 	#radios img, #jamendo-top img, #search-results img, #artist-info img, #artist_cover, user_img, #album_cover {
 		width: 4rem;
@@ -79,7 +86,7 @@ a {text-decoration: none}
 	#main {margin: 0.5rem}
 	#artist_name {margin-top: 0.5rem}
 	input[type="text"] {width: 100%}
-	#clear-data {margin-top: 0.5rem}
+	.feed_text {font-size: 100%}
 }
 .tab { margin-bottom: 1rem;}
 .tab.active {
@@ -144,13 +151,11 @@ input, .styled-select select {
 	display: none;
 	transition: all 2s linear;
 }
-#error .show {
-	display:block;
-}
+
 .form_error {border-color: #F00 !important;}
 #btn-login, #saveconf, #clear-data {color: #fff}
 #clear-data { background: rgb(202, 60, 60)}
-#user-playlists li, #album-tracks li {display: block; margin: 0.5rem; border-bottom: 1px solid #522A5B; font-weight: bold; width: 100%}
+#user-playlists li, #album-tracks li, #album-reviews li, #artist-tracks li {display: block; margin: 0.5rem; border-bottom: 1px solid #522A5B; width: 100%}
 /* Loading icon */
 #loading {
 	z-index: 5;
@@ -165,3 +170,50 @@ input, .styled-select select {
 .icon-2x {font-size: 200%}
 #radio-control {display: none}
 #fav {display: none}
+
+progress {
+	border: 1px solid  #826ba9;
+	border-radius: 10px;
+}
+
+progress[value]::-moz-progress-bar {
+	border: 0;
+	border-radius: 5px;
+	background: #826ba9;
+	background: -moz-linear-gradient(left,  #826ba9 0%, #482e74 40%, #1e0a3f 100%);
+	background: linear-gradient(to right,  #826ba9 0%,#482e74 40%,#1e0a3f 100%);
+
+
+
+}
+/* Styles for reviews */
+.autor {font-weight: bold}
+
+.stars {
+	height: 16px;
+	width: 80px;
+	background: url('../img/star-empty.png') repeat-x;
+	float: left;
+	margin: 0 10px 0 0;
+	padding: 0;
+}
+
+.stars > div {
+	margin: 0;
+	padding: 0;
+	background: url('../img/star.png') repeat-x;
+	height: 16px;
+}
+
+.likes {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	top: -3px;
+}
+
+#user-playlists a, #album-tracks a, #artist-tracks a {
+	display: block;
+}
+
+#conf_buttons button {margin-right: 5px; display: inline}
