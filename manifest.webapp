@@ -26,9 +26,6 @@
 		},
 		"desktop-notification":{
 			"description": "Needed for show the notifications"
-		},
-		"device-storage:music":{
-			"access": "readwrite"
 		}
 	},
 	"installs_allowed_from": [
