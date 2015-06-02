@@ -586,7 +586,7 @@ function getToken(url, type){
 			console.error(status);
 		},
 		success: function(jsonp) {
-			$('#btn-login').text(_('logout'));
+			$('#btn-login').html('<i class="icon-logout"></i> '+_('logout')+'');
 			localStorage.access_token = jsonp.access_token;
 			localStorage.refresh_token = jsonp.refresh_token;
 			if (type == 'refresh'){
@@ -623,7 +623,7 @@ function JamendoLogout(){
 	localStorage.code = ''
 	localStorage.access_token = '';
 	localStorage.refresh_token = '';
-	$('#btn-login').text(_('login'));
+	$('#btn-login').html('<i class="icon-login"></i> '+_('login')+'');
 }
 
 function getUserData(){

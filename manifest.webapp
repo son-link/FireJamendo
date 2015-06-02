@@ -100,5 +100,6 @@
 	"redirects": [{
 		"from": "http://localhost",
 		"to": "/redirect.html"
-	}]
+	}],
+	"launch_path": "/"
 }
