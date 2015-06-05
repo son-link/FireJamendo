@@ -83,3 +83,8 @@
 * Added icons for login/logout, save and delete buttons on configuration section
 * Fix some bugs
 * Clean code and remove unnecesary files
+
+##r14 (0.5.9.1):
+* Change template system for another modified by me. Original by [TooBug](https://github.com/TooBug/MicroTmpl)
+* Change login function.
+* Other changes and remove unnecesary files

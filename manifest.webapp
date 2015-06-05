@@ -96,10 +96,10 @@
 		"gl":{},
 		"de":{}
 	},
+	"type": "privileged",
 	"default_locale": "en",
 	"redirects": [{
-		"from": "http://localhost",
+		"from": "http://localhost/",
 		"to": "/redirect.html"
-	}],
-	"launch_path": "/"
+	}]
 }
