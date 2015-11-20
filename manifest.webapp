@@ -1,5 +1,5 @@
 {
-	"version": "0.5.9",
+	"version": "0.5.9.3",
 	"name": "FireJamendo",
 	"description": "Jamendo player for Firefox OS and Firefox web browser",
 	"launch_path": "/index.html",
@@ -17,9 +17,6 @@
 	"permissions": {
 		"systemXHR": {
 			"description":"Needed to access to Jamendo APIs"
-		},
-		"backgroundservice": {
-			"description": "Needed to run FireJamendo in background"
 		},
 		"audio-channel-content": {
 			"description": "Needed to keep playing audio when FireJamendo is running on background"
@@ -46,10 +43,7 @@
 				"systemXHR": {
 					"description":"Bezonata por atingi API-ojn de Jamendo"
 				},
-				"backgroundservice": {
-					"description": "Bezonata por ruli FireJamendon fone"
-				},
-					"audio-channel-content": {
+				"audio-channel-content": {
 					"description": "Bezonata por ludi muzikon kiam FireJamendo rulas fone"
 				},
 				"desktop-notification": {
@@ -63,9 +57,6 @@
 			"permissions": {
 				"systemXHR": {
 					"description":"Necesario para acceder a la API de Jamendo"
-				},
-				"backgroundservice": {
-					"description": "Necesario para que FireJamendo se siga ejecutando en segundo plano"
 				},
 					"audio-channel-content": {
 					"description": "Necesario para que FireJamendo siga reproduciendo la música en segundo plano"
@@ -81,9 +72,6 @@
 			"permissions": {
 				"systemXHR": {
 					"description":"Necessario per accedere alle API di Jamendo"
-				},
-				"backgroundservice": {
-					"description": "Necessario per far funzionare FireJamendo in background"
 				},
 				"audio-channel-content": {
 					"description": "Necessario per far continuare la musica quando FireJamendo è in background"

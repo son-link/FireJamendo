@@ -8,7 +8,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no" />
 		<link rel="shortcut icon" href="img/icons/icon16x16.png">
 		<!-- Startup configuration -->
-		<link rel="manifest" href="/manifest.webapp">
+		<link rel="manifest" href="manifest.webapp">
 
 		<!-- Fallback application metadata for legacy browsers -->
 		<meta name="FireJamendo" content="Store Finder">
@@ -19,8 +19,7 @@
 		<link rel="icon" sizes="256x256" href="img/icons/icon/256x256.png">
 		<!-- Translations -->
 		<meta name="defaultLanguage" content="en-US">
-		<meta name="availableLanguages" content="es, en-US, de, eo, it, gl">
-		<link rel="localization" href="locale/{locale}.properties">
+		<link rel="prefetch" type="application/l10n" href="locale/locales.ini" />
 		<script type="text/javascript" src="js/zepto.min.js" defer></script>
 		<link href="css/pure-min.css" rel="stylesheet" type="text/css">
 		<link href="css/grids-responsive-min.css" rel="stylesheet" type="text/css">
@@ -324,7 +323,7 @@
 	<script type="text/html" id="playlist">
 		<li>
 			<p>
-				<a href="#" playlist-id="{%id%}">{%name%}</a>
+				<a href="#" playlist-id="{%id%}" data-type="{%type%}">{%name%}</a>
 			</p>
 		</li>
 	</script>

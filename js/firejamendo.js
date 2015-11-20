@@ -24,6 +24,11 @@ var config;
 var _ = navigator.mozL10n.get;
 navigator.mozL10n.once(start);
 function start() {
+	lang = navigator.mozL10n.language.code;
+	if (lang.search(/es-*/) != -1){
+		// Need for translate to all Spanish variants (es-ES, es-AR, es-MX, etc) on Firefox web browser
+		navigator.mozL10n.language.code = 'es';
+	}
 	config = JSON.stringify({
 		top_orderby : "popularity_total",
 		profile_limit : 10,
@@ -203,8 +208,12 @@ function notifyMe(body) {
 	else if (Notification.permission === 'granted') {
 		var notification = new Notification('Firejamendo', {'body': body, 'icon': playlist[currentTrack].image, tag: 'firejamendo'});
 		notification.onclick = function(){
-			$('#section-title').text(_('now-listen'));
-			changeDIV('now-listen');
+			var request = window.navigator.mozApps.getSelf();
+
+			request.onsuccess = function () {
+				if (request.result)
+					request.result.launch();
+			}
 		}
 	}
 	else if (Notification.permission !== 'denied') {
@@ -435,7 +444,7 @@ function getTop(top){
 			if (top == 'albums'){
 				info = {id: data[i].id, cover: cover, name: data[i].name, artist: data[i].artist_name, type: 'album'}
 			}else if (top == 'artists'){
-				info = {id: data[i].id, cover: cover, name: null, artist: data[i].name, type: 'artist'}
+				info = {id: data[i].id, cover: cover, name: '', artist: data[i].name, type: 'artist'}
 			}else{
 				top_tracks[i] = {"artist_name": data[i].artist_name, "track_name": data[i].name, "image": cover, "audio": data[i].audio, "album_name": data[i].album_name, 'download': data[i].audiodownload, 'track_id': data[i].id};
 				info = {id: i, cover: cover, name: data[i].name, artist: data[i].artist_name, type: 'track'}
@@ -537,7 +546,7 @@ function getArtistData(id){
 				cover = 'img/no-image.png';
 			}
 			artist_tracks[i] = {"artist_name": value.artist_name, "track_name": value.track_name, "image": cover, "audio": value.audio, "album_name": value.album_name, 'track_id': value.track_id}
-			info = {id: i, name: value.track_name};
+			info = {id: i, name: value.track_name, type: 'artist-track'};
 			$('#artist-tracks ul').append(MicroTmpl('playlist', info));
 			i++;
 		});
@@ -549,7 +558,7 @@ $("#search-btn").click(function(e) {
 	search = $('#search-input').val();
 	searchby = $('#search-by').val();
 	orderby = $('#order-by').val();
-	limit = $('#limit option:selected').text();
+	limit = $('#limit option').val();
 	params = '{0}/?namesearch={1}&order={2}&limit={3}'.format(searchby, search, orderby, limit);
 	if (search){
 		getData(params, function(responseText) {
@@ -572,14 +581,12 @@ $("#search-btn").click(function(e) {
 });
 
 function getToken(url, type){
-	console.log(url);
 	// Get, or refresh, the Oauth token for access user data.
 	if (type == 'new'){
 		params = {'client_id': client_id, 'client_secret': client_secret, 'code': localStorage.code, 'grant_type': 'authorization_code', 'redirect_uri': url};
 	}else if (type == 'refresh'){
 		params = {'client_id': client_id, 'client_secret': client_secret, 'grant_type': 'refresh_token', 'refresh_token': localStorage.refresh_token};
 	}
-	console.log(params);
 	$.ajax({
 		url: 'https://api.jamendo.com/v3.0/oauth/grant',
 		data: params,
@@ -601,7 +608,6 @@ function getToken(url, type){
 
 function JamendoLogin(){
 	var URL, REDIRECT;
-	console.log(window.location)
 	if (window.location.protocol == "app:"){
 		URL = 'http://localhost/redirect.html';
 		REDIRECT = window.location.origin+'/redirect.html'
@@ -671,7 +677,7 @@ function getUserData(){
 			}else{
 				cover = 'img/no-image.png';
 			}
-			info = {id: data.albums[i].id, cover: cover, name: data.albums[i].name, artist: data.albums[i].artist_name, type: null};
+			info = {id: data.albums[i].id, cover: cover, name: data.albums[i].name, artist: data.albums[i].artist_name, type: ''};
 			$('#user-albums').append(MicroTmpl('top_list_template', info));
 		}
 	});
@@ -684,7 +690,7 @@ function getUserData(){
 			}else{
 				cover = 'img/no-image.png';
 			}
-			info = {id: data.artists[i].id, cover: cover, name: null, artist: data.artists[i].name, type: null};
+			info = {id: data.artists[i].id, cover: cover, name: '', artist: data.artists[i].name, type: ''};
 			$('#user-artists').append(MicroTmpl('top_list_template', info));
 		}
 	});
@@ -698,7 +704,7 @@ function getUserData(){
 				cover = 'img/no-image.png';
 			}
 			user_tracks[i] = {"artist_name": data.tracks[i].artist_name, "track_name": data.tracks[i].name, "image": cover, "audio": data.tracks[i].audio, "album_name":data.tracks[i].album_name, 'track_id': data.tracks[i].id}
-			info = {id: data.tracks[i].id, cover: cover, name: data.tracks[i].name, artist: data.tracks[i].artist_name, type: null};
+			info = {id: data.tracks[i].id, cover: cover, name: data.tracks[i].name, artist: data.tracks[i].artist_name, type: ''};
 			$('#user-tracks').append(MicroTmpl('top_list_template', info));
 		}
 	});
@@ -808,10 +814,11 @@ document.addEventListener('DOMContentLoaded', function(){
 	$('#artist-tracks, #user-tracks').delegate('a', 'click', function(){
 		if ($(this).attr('data-type') == 'artist-track'){
 			playlist = artist_tracks;
+			currentTrack = parseInt($(this).attr('playlist-id'));
 		}else{
 			playlist = user_tracks;
+			currentTrack = parseInt($(this).attr('track-id'));
 		}
-		currentTrack = parseInt($(this).attr('track-id'));
 		$('#section-title').text(_('now-listen'));
 		qs('#controls').style.display = 'block';
 		qs('#radio-control').style.display = 'none';

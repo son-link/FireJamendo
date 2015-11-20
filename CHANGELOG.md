@@ -88,3 +88,11 @@
 * Change template system for another modified by me. Original by [TooBug](https://github.com/TooBug/MicroTmpl)
 * Change login function.
 * Other changes and remove unnecesary files
+
+##r15 (0.5.9.2):
+* Back to the old l10n.js. The last version don't work on Firefox OS 1.3
+* Firefox OS 1.1 it is no longer supported. Required 1.3 or newer.
+
+##r16 (0.5.9.3):
+* Fix bugs on search and artist tracks
+* Now you can return to the app if you click on the notification
